@@ -41,6 +41,14 @@ export function PrioritizationPanel({ items, selectedId, onSelect }: Prioritizat
                   Exposure {item.componentScores.exposureScore} · Disaster history{" "}
                   {item.componentScores.disasterHistoryScore}
                 </p>
+                <ul className="hazard-score-list">
+                  {Object.entries(item.componentScores.hazardScores).map(([hazardType, score]) => (
+                    <li key={hazardType}>
+                      <span>{hazardType.replace("_", " ")}</span>
+                      <span>{score}</span>
+                    </li>
+                  ))}
+                </ul>
                 {item.suggestedSites.length > 0 && (
                   <p>
                     Suggested site:{" "}

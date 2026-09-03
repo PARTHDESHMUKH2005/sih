@@ -447,17 +447,22 @@ BASEMAP_STYLE_URL=https://demotiles.maplibre.org/style.json
 
 ## 7. How to Run Locally
 
-> **Status:** Phase 0 is implemented with the chosen stack — **Express + TypeScript** (backend),
-> **React + Vite + TypeScript** (frontend), **MapLibre GL JS** (map). The backend currently serves an
-> **in-memory demo seed dataset** (one fictional "Demo District" in Uttarakhand) so the API and
-> dashboard are runnable end-to-end today; PostGIS wiring, migrations, and the real ingestion/scoring
-> pipeline (Phases 1–7) land in follow-up PRs. `docker-compose.yml` already brings up Postgres/PostGIS
-> for that work, but nothing reads from it yet.
+> **Status:** Phases 0–10 are implemented end to end on the chosen stack — **Express + TypeScript**
+> (backend), **React + Vite + TypeScript** (frontend), **MapLibre GL JS** (map), **PostgreSQL 16 +
+> PostGIS** (via Prisma + raw SQL for spatial queries). Ingestion (Phase 1), AHP hazard scoring
+> (Phase 2), population exposure (Phase 3), carrying-capacity/suitability (Phase 4), and prioritization
+> (Phase 5) run as real scripts over PostGIS — `ST_DWithin`, `ST_Distance`, and `ST_Area(geography)` —
+> against a synthetic fixture dataset (a fictional "Demo District" in Uttarakhand, standing in for the
+> real ISRO/IMD/GSI/Census/NDEM sources, which need per-user API credentials this environment doesn't
+> have). Auth (Phase 8) is fully DB-backed with refresh-token rotation and revocation. Remaining work:
+> real credentialed data sources (swap the fixtures), CI/CD deployment (Phase 11), and a live tile
+> server for production scale.
 
 ### Prerequisites
 
 - **Node.js 20+**
-- **Docker + Docker Compose** — only needed once Phase 7 (DB wiring) lands; not required to run today
+- **PostgreSQL 16+ with PostGIS** — either `docker compose up -d postgres` (brings up the `postgis/postgis:16-3.4`
+  image) or a local Postgres+PostGIS install
 
 ### Steps
 
@@ -466,20 +471,44 @@ BASEMAP_STYLE_URL=https://demotiles.maplibre.org/style.json
 git clone <repo-url> bhoomi-suraksha
 cd bhoomi-suraksha
 
-# 2. Install and start the backend (http://localhost:8000)
+# 2. Start Postgres+PostGIS
+docker compose up -d postgres
+# (or point DATABASE_URL in .env at an existing local PostGIS instance)
+
+# 3. Configure environment
+cp .env.example .env
+# edit .env if your DATABASE_URL / JWT secrets differ from the defaults
+
+# 4. Install backend deps, apply migrations, run the data pipeline
 cd backend && npm install
+npx prisma migrate deploy   # creates schema + GiST spatial indexes
+npm run ingest               # Phase 1 — reads fixtures/raw/, writes data/processed/ + manifest
+npm run score                # Phase 2 — AHP weighted overlay -> hazard_zones.severityScore
+npm run prioritize            # Phase 3-5 — exposure, site suitability/capacity, ranked tiers
+npm run seed:users            # creates the 3 demo users below
+
+# 5. Start the backend (http://localhost:8000, API docs at /api/docs)
 npm run dev
 
-# 3. Install and start the frontend (new terminal, http://localhost:5173)
-cd frontend && npm install
+# 6. Install and start the frontend (new terminal, http://localhost:5173)
+cd ../frontend && npm install
 npm run dev
 ```
 
-Optional: `cp .env.example .env` at the repo root to override JWT secrets / ports — the backend picks
-it up automatically. Without it, dev-only default secrets are used (fine for local Phase 0 use, not
-for anything deployed).
+Re-running `npm run ingest` is idempotent (skips sources whose fixture hash hasn't changed) — the
+"continuously updated" requirement is `ingest && score && prioritize` re-run whenever new data lands.
 
-### Default demo logins (hardcoded for now; move to the DB in Phase 8)
+### Running tests
+
+```bash
+cd backend && npm test   # unit tests (scoring math) + integration tests (supertest against the API)
+```
+
+Integration tests run against whatever Postgres the pipeline above populated — CI (`.github/workflows/ci.yml`)
+spins up a fresh `postgis/postgis` service container and runs the full ingest → score → prioritize →
+seed → test sequence on every PR.
+
+### Default demo logins (real DB-backed users, created by `npm run seed:users`)
 
 | Role | Email | Password |
 |------|-------|----------|
@@ -487,37 +516,52 @@ for anything deployed).
 | State DM Official | `sdma-uk@bhoomi.gov.in` | `changeme-sdma` |
 | Public Viewer | `viewer@bhoomi.gov.in` | `changeme-viewer` |
 
-> Change or remove these before any non-local deployment.
+> Change or remove these before any non-local deployment. New users are created via
+> `POST /api/auth/register` by an existing admin — there is no public self-registration.
 
 ### Verifying it works
 
 1. Open `http://localhost:5173` and log in as the admin.
-2. The map should render Red Zone layers for the seeded district.
-3. The prioritization panel should list habitations across the three tiers.
-4. Log in as the State DM official — only the assigned state's data should be visible.
+2. The map should render Red Zone layers, relocation-site polygons, and habitation markers for the
+   seeded district; toggling a hazard-layer checkbox or the opacity slider should update the map live.
+3. The prioritization panel should list habitations across the three tiers, computed by the real
+   scoring pipeline (not hardcoded) — click a habitation for its component-score breakdown, or a site
+   polygon for its suitability sub-scores.
+4. Log in as the State DM official — only the assigned state's data should be visible, even if you
+   edit the `state` query param directly.
 5. Log in as the public viewer — only aggregated layers and district summaries, no habitation list.
+6. Export CSV / GeoJSON from the prioritization panel to confirm the filtered plan downloads.
 
 ---
 
-## Repository Structure (target)
+## Repository Structure
 
 ```
 bhoomi-suraksha/
-├── backend/                 # chosen backend option (Express / FastAPI / NestJS)
-│   ├── src/ (or app/)
-│   ├── migrations/
-│   ├── scripts/             # seed, ingestion, scoring, prioritization
-│   └── tests/
-├── frontend/                # chosen frontend option (React+Vite / Next / Nuxt)
+├── backend/                     # Express + TypeScript
+│   ├── src/
+│   │   ├── routes/              # hazards, habitations, sites, prioritization, summary, auth
+│   │   ├── middleware/auth.ts   # JWT verification, role guard, state-scope enforcement
+│   │   ├── scoring/             # AHP, exposure, carrying-capacity, prioritization math (unit-tested)
+│   │   ├── ingest/               # generic ingestion runner + manifest/idempotency
+│   │   ├── gis.ts               # bbox + pagination query-param helpers
+│   │   └── db.ts                # Prisma client singleton
+│   ├── scripts/                 # ingest.ts / score.ts / prioritize.ts / seedUsers.ts (the pipeline)
+│   ├── fixtures/raw/            # synthetic Demo District data standing in for real credentialed sources
+│   ├── prisma/                  # schema.prisma + migrations (incl. hand-added GiST spatial indexes)
+│   └── tests/                   # supertest integration tests (auth flows, role/state scoping)
+├── frontend/                    # React + Vite + TypeScript, MapLibre GL JS
 │   └── src/
+│       ├── components/          # MapView, Filters, PrioritizationPanel, SiteDetail, LoginScreen
+│       └── lib/export.ts        # CSV / GeoJSON export of the filtered prioritization plan
 ├── config/
-│   └── ahp_weights.yaml     # versioned scoring weights & factor definitions
+│   └── ahp_weights.yaml         # versioned AHP factor weights per hazard type
 ├── data/
-│   ├── raw/                 # downloaded source data (gitignored)
-│   └── processed/           # canonical COGs + derived layers (gitignored)
-├── docker-compose.yml
-├── Makefile                 # ingest / score / prioritize / test targets
-├── .github/workflows/       # CI/CD
+│   ├── raw/                     # real downloaded source data goes here (gitignored) — not used yet
+│   └── processed/               # ingest.ts output + manifest.json (gitignored, regenerated by `npm run ingest`)
+├── docker-compose.yml            # Postgres+PostGIS (and optional Redis)
+├── Makefile
+├── .github/workflows/ci.yml     # fresh PostGIS container -> migrate -> ingest/score/prioritize -> test
 ├── .env.example
 └── README.md
 ```
