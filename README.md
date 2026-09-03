@@ -363,6 +363,22 @@ scale.
 
 ---
 
+## 5a. Stretch Goals — Differentiators
+
+> Not required for the core deliverable, but each of these builds directly on Phases 1–8 rather than
+> adding a new subsystem, and each is aimed at a specific thing judges/officials care about: proof the
+> scoring works, a visibly interactive demo, and a closed action loop instead of a static map.
+
+| Idea | What it does | Why it matters |
+|------|--------------|-----------------|
+| **Retrodiction demo** | Run the pipeline on data *as it existed* before a known past disaster (e.g. pre-2023 Joshimath) and show the model would have flagged the habitation as "Immediate" months earlier. | Concrete proof the scoring works on a real, checkable event — not just a plausible-looking map. Highest-impact demo moment. |
+| **What-if simulation** | Let an official nudge rainfall intensity or mark a new road/embankment and watch Red Zones and priority tiers recompute live. | Reuses the existing AHP recompute path; turns a static dashboard into something that visibly responds. |
+| **Alerting loop** | When a data refresh pushes a habitation into the "Immediate" tier, fire an SMS/email to the assigned SDMA official. | Closes the "continuously updated" story into an actual action, not just a nicer map. |
+| **Change / diff view** | Show what moved between this run and the last (new Red Zone, tier upgrade) with a timestamp. | Reuses the audit log from Phase 8; gives officials a sense of trend, not just a snapshot. |
+| **Hindi / regional-language toggle** | UI toggle for Hindi and relevant regional languages. | The actual end users are district-level officials, not just English speakers — near-zero build cost, high real-deployment signal. |
+
+---
+
 ## 6. Environment Variables & Config
 
 Copy `.env.example` to `.env` and fill in values. Template:
