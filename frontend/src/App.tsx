@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import "./App.css";
 import { getHazardZones, getHabitations, getPrioritization, getSites, getSummary } from "./api";
+import { BrandMark } from "./components/BrandMark";
 import { Filters } from "./components/Filters";
 import { Legend } from "./components/Legend";
 import { LoginScreen } from "./components/LoginScreen";
@@ -88,7 +89,10 @@ function App() {
   return (
     <div className="dashboard">
       <header className="topbar">
-        <h1>Bhoomi Suraksha</h1>
+        <div className="topbar-brand">
+          <BrandMark size={26} />
+          <h1>Bhoomi Suraksha</h1>
+        </div>
         <div className="topbar-right">
           <span className="role-badge">{session.role.replace("_", " ")}</span>
           {session.stateCode && <span className="state-badge">{session.stateCode}</span>}
@@ -101,13 +105,25 @@ function App() {
       {error && <div className="error-banner">{error}</div>}
 
       {summary && (
-        <div className="summary-bar">
-          <span>
-            {summary.district}, {summary.state}
-          </span>
-          <span>{summary.habitationCount} habitations</span>
-          <span>{summary.totalPopulationExposed.toLocaleString()} people exposed</span>
-          <span>{summary.hazardZoneCount} hazard zones</span>
+        <div className="stat-row">
+          <div className="stat-card stat-card-wide">
+            <span className="stat-label">District</span>
+            <span className="stat-value stat-value-text">
+              {summary.district}, {summary.state}
+            </span>
+          </div>
+          <div className="stat-card">
+            <span className="stat-label">Habitations</span>
+            <span className="stat-value">{summary.habitationCount}</span>
+          </div>
+          <div className="stat-card">
+            <span className="stat-label">People exposed</span>
+            <span className="stat-value">{summary.totalPopulationExposed.toLocaleString()}</span>
+          </div>
+          <div className="stat-card">
+            <span className="stat-label">Hazard zones</span>
+            <span className="stat-value">{summary.hazardZoneCount}</span>
+          </div>
         </div>
       )}
 

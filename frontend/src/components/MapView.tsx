@@ -4,10 +4,10 @@ import { useEffect, useRef } from "react";
 import type { HazardType } from "../types";
 
 const HAZARD_COLORS: Record<string, string> = {
-  landslide: "#b0413e",
-  flood: "#2b6cb0",
-  coastal_erosion: "#805ad5",
-  cloudburst: "#38a169",
+  landslide: "#a6423a",
+  flood: "#2a5f9e",
+  coastal_erosion: "#6b4c9a",
+  cloudburst: "#2f8f5b",
 };
 
 interface MapViewProps {
@@ -124,7 +124,7 @@ export function MapView({
         id: "sites-fill",
         type: "fill",
         source: "sites",
-        paint: { "fill-color": "#2f855a", "fill-opacity": 0.35 },
+        paint: { "fill-color": "#1f7a6c", "fill-opacity": 0.4 },
       });
       map.on("click", "sites-fill", (e: maplibregl.MapLayerMouseEvent) => {
         const id = e.features?.[0]?.properties?.id;
@@ -152,6 +152,17 @@ export function MapView({
       }
       map.addSource("habitations", { type: "geojson", data: habitations });
       map.addLayer({
+        id: "habitations-points-halo",
+        type: "circle",
+        source: "habitations",
+        paint: {
+          "circle-radius": 13,
+          "circle-color": "#000",
+          "circle-opacity": 0.12,
+          "circle-blur": 0.6,
+        },
+      });
+      map.addLayer({
         id: "habitations-points",
         type: "circle",
         source: "habitations",
@@ -160,9 +171,9 @@ export function MapView({
           "circle-color": [
             "match",
             ["get", "tier"],
-            "immediate", "#c53030",
-            "short_term", "#dd6b20",
-            "medium_term", "#d69e2e",
+            "immediate", "#b3261e",
+            "short_term", "#c26a1d",
+            "medium_term", "#a3821a",
             "#718096",
           ],
           "circle-stroke-width": 2,
