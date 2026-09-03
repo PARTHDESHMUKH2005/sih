@@ -111,9 +111,10 @@ to the scoring engine — nothing more.
 
 ## 2. Tech Stack Options
 
-> **The team must pick one backend option and one frontend option before Phase 0 begins.**
-> Everything downstream (scaffolding, ORM choice, CI config, Docker services) follows from that
-> choice. The rest of this README uses placeholder values and notes both paths where they diverge.
+> **Decided for this repo: backend option (a) Express + TypeScript, frontend option (a) React + Vite +
+> TypeScript, MapLibre GL JS for the map** — see Section 7 for the running Phase 0 implementation.
+> The options below are kept for reference / rationale; everything downstream (ORM choice, CI config,
+> Docker services) follows the Express/React path from here on.
 
 ### Backend — pick one
 
@@ -446,12 +447,17 @@ BASEMAP_STYLE_URL=https://demotiles.maplibre.org/style.json
 
 ## 7. How to Run Locally
 
+> **Status:** Phase 0 is implemented with the chosen stack — **Express + TypeScript** (backend),
+> **React + Vite + TypeScript** (frontend), **MapLibre GL JS** (map). The backend currently serves an
+> **in-memory demo seed dataset** (one fictional "Demo District" in Uttarakhand) so the API and
+> dashboard are runnable end-to-end today; PostGIS wiring, migrations, and the real ingestion/scoring
+> pipeline (Phases 1–7) land in follow-up PRs. `docker-compose.yml` already brings up Postgres/PostGIS
+> for that work, but nothing reads from it yet.
+
 ### Prerequisites
 
-- **Docker + Docker Compose** (simplest path — brings up PostGIS and optionally Redis)
-- **Node.js 20+** (for Express / NestJS backend and all frontend options) **or Python 3.11+**
-  (for the FastAPI backend)
-- **GDAL** system libraries (`gdal-bin`, `libgdal-dev`) if running ingestion scripts outside Docker
+- **Node.js 20+**
+- **Docker + Docker Compose** — only needed once Phase 7 (DB wiring) lands; not required to run today
 
 ### Steps
 
@@ -460,44 +466,20 @@ BASEMAP_STYLE_URL=https://demotiles.maplibre.org/style.json
 git clone <repo-url> bhoomi-suraksha
 cd bhoomi-suraksha
 
-# 2. Configure environment
-cp .env.example .env
-# edit .env — set JWT secrets and data source paths
-
-# 3. Start infrastructure (PostgreSQL + PostGIS, optional Redis)
-docker compose up -d postgres        # add: redis  (if CACHE_ENABLED=true)
-
-# 4. Install backend dependencies
-#    Node backend (Express / NestJS):
+# 2. Install and start the backend (http://localhost:8000)
 cd backend && npm install
-#    — or — FastAPI backend:
-cd backend && python -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt
+npm run dev
 
-# 5. Run database migrations
-#    Prisma:        npx prisma migrate deploy
-#    TypeORM:       npm run migration:run
-#    Alembic:       alembic upgrade head
-
-# 6. Seed sample data (one or two districts + demo users)
-#    Node:          npm run seed
-#    FastAPI:       python -m scripts.seed
-
-# 7. (Optional) Run the data pipeline on the sample district
-make ingest        # fetch/parse configured sources into data/processed + PostGIS
-make score         # AHP weighted overlay -> hazard score layers
-make prioritize    # exposure + carrying capacity + history -> ranked tiers
-#    (skip this step for a first run — the seed data already includes precomputed results)
-
-# 8. Start the backend
-#    Node:          npm run dev            # http://localhost:8000
-#    FastAPI:       uvicorn app.main:app --reload --port 8000
-
-# 9. Start the frontend (new terminal)
-cd ../frontend && npm install
-npm run dev                               # http://localhost:5173
+# 3. Install and start the frontend (new terminal, http://localhost:5173)
+cd frontend && npm install
+npm run dev
 ```
 
-### Default demo logins (created by the seed script)
+Optional: `cp .env.example .env` at the repo root to override JWT secrets / ports — the backend picks
+it up automatically. Without it, dev-only default secrets are used (fine for local Phase 0 use, not
+for anything deployed).
+
+### Default demo logins (hardcoded for now; move to the DB in Phase 8)
 
 | Role | Email | Password |
 |------|-------|----------|
