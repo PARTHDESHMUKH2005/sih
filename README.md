@@ -64,9 +64,9 @@ through a map-based dashboard built for a disaster-management official, not a GI
 
 | Layer | Component |
 |-------|-----------|
-| **Hazard data** | ISRO Bhuvan / NRSC Landslide Atlas, SRTM/Cartosat DEM, IMD rainfall data, historic disaster records. |
+| **Hazard data** | ISRO Bhuvan / NRSC Landslide Atlas, SRTM/Cartosat DEM (via Bhoonidhi), GSI Bhukosh lithology, IMD rainfall data, NDEM historic disaster records. |
 | **Scoring engine** | GIS multi-criteria model (AHP weighted overlay, optionally blended with an ML susceptibility model) — a proven approach in India for site-suitability problems. |
-| **Population layer** | Census/SECC habitation-level data overlaid on hazard scores to compute actual exposure, not hazard alone. |
+| **Population layer** | Census/SECC habitation-level data, cross-checked against GHSL population grids so exposure isn't frozen at the 2011 census. |
 | **Carrying capacity** | Suitability scoring of candidate relocation sites on slope, land use, water access, and infrastructure distance. |
 | **Dashboard** | Map-first web dashboard showing Red Zones, ranked priorities, and suggested viable sites — no GIS expertise needed to read it. |
 
@@ -223,12 +223,23 @@ scale.
 - **Goal:** Pull the source datasets into a consistent local format the scoring engine can read.
 - **Sources:**
   - **ISRO Bhuvan / NRSC Landslide Atlas** — landslide inventory and susceptibility polygons.
-  - **SRTM / Cartosat DEM** — elevation, from which slope, aspect, curvature, flow accumulation are
-    derived.
+  - **SRTM / Cartosat DEM**, pulled via **Bhoonidhi** (ISRO's EO data hub, API available) — elevation,
+    from which slope, aspect, curvature, flow accumulation are derived.
+  - **GSI Bhukosh** — lithology and geomorphology shapefiles (free, NDSAP-licensed), the actual source
+    for the lithology factor in the landslide AHP model.
   - **IMD rainfall data** — gridded daily/sub-daily rainfall, historical normals, extreme-event
     thresholds.
   - **Census / SECC population data** — village/ward-level population, household counts, and
     vulnerability indicators.
+  - **GHSL (Global Human Settlement Layer)** — 100m population grid updated through 2030 projections
+    (Copernicus/EC, via HDX); blended with Census/SECC so the population layer isn't stuck at the 2011
+    census between decennial updates.
+  - **NDEM (National Database for Emergency Management)** — ISRO/NDMA's disaster-event geodatabase;
+    the concrete source for the disaster-history factor used in Phase 5, rather than an unnamed
+    "historic records" placeholder.
+  - Note: **CWC** publishes flood forecasts/advisories (ffs.india-water.gov.in) but raw hourly gauge
+    data is not distributable — use their public forecast outputs or the NRSC/NDMA flood hazard atlas
+    as the flood-model input, not raw gauge feeds.
 - **Deliverable:** Idempotent ingestion scripts (one per source) that download/parse and write to a
   canonical local store — rasters as **Cloud-Optimized GeoTIFF** in a `data/raw/` and `data/processed/`
   tree, vectors loaded into PostGIS staging tables. A manifest file recording source, date fetched,
@@ -407,10 +418,14 @@ PASSWORD_HASH_ALGO=argon2            # or: bcrypt
 
 # ── Data sources (paths and/or API keys) ──────────────────
 BHUVAN_API_KEY=                      # ISRO Bhuvan / NRSC services, if used
+BHOONIDHI_API_KEY=                   # ISRO EO data hub, for SRTM/Cartosat DEM + imagery pulls
 IMD_DATA_PATH=./data/raw/imd         # local path to IMD rainfall grids
 DEM_DATA_PATH=./data/raw/dem         # SRTM / Cartosat DEM tiles
 LANDSLIDE_ATLAS_PATH=./data/raw/nrsc_landslide_atlas
+BHUKOSH_DATA_PATH=./data/raw/bhukosh # GSI lithology / geomorphology shapefiles
 CENSUS_DATA_PATH=./data/raw/census   # Census / SECC population data
+GHSL_DATA_PATH=./data/raw/ghsl       # Global Human Settlement Layer population grid
+NDEM_DATA_PATH=./data/raw/ndem       # NDEM historic disaster-event geodatabase
 PROCESSED_DATA_PATH=./data/processed
 ANALYSIS_CRS=EPSG:7755               # projected CRS for all analysis
 
