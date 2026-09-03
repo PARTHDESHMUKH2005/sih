@@ -16,10 +16,17 @@ export async function login(email: string, password: string): Promise<Session> {
   return { ...data, email };
 }
 
-async function authedFetch(path: string, session: Session | null) {
+async function authedFetch(path: string, session: Session | null, params?: Record<string, string | undefined>) {
   const headers: Record<string, string> = {};
   if (session) headers.Authorization = `Bearer ${session.accessToken}`;
-  const res = await fetch(`${API_BASE}${path}`, { headers });
+
+  const query = new URLSearchParams();
+  for (const [key, value] of Object.entries(params ?? {})) {
+    if (value) query.set(key, value);
+  }
+  const qs = query.toString();
+
+  const res = await fetch(`${API_BASE}${path}${qs ? `?${qs}` : ""}`, { headers });
   if (!res.ok) throw new Error(`Request failed: ${res.status}`);
   return res.json();
 }
@@ -32,12 +39,18 @@ export function getSummary() {
   return authedFetch("/summary", null) as Promise<Summary>;
 }
 
-export function getPrioritization(session: Session) {
-  return authedFetch("/prioritization", session) as Promise<PrioritizationItem[]>;
+export interface PrioritizationFilters {
+  [key: string]: string | undefined;
+  district?: string;
+  tier?: string;
 }
 
-export function getHabitations(session: Session) {
-  return authedFetch("/habitations", session) as Promise<GeoJSON.FeatureCollection>;
+export function getPrioritization(session: Session, filters: PrioritizationFilters = {}) {
+  return authedFetch("/prioritization", session, filters) as Promise<PrioritizationItem[]>;
+}
+
+export function getHabitations(session: Session, filters: PrioritizationFilters = {}) {
+  return authedFetch("/habitations", session, filters) as Promise<GeoJSON.FeatureCollection>;
 }
 
 export function getSites() {

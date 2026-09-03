@@ -1,11 +1,21 @@
 import { useCallback, useEffect, useState } from "react";
 import "./App.css";
 import { getHazardZones, getHabitations, getPrioritization, getSites, getSummary } from "./api";
+import { Filters } from "./components/Filters";
 import { Legend } from "./components/Legend";
 import { LoginScreen } from "./components/LoginScreen";
 import { MapView } from "./components/MapView";
 import { PrioritizationPanel } from "./components/PrioritizationPanel";
-import type { PrioritizationItem, Session, Summary } from "./types";
+import { SiteDetail, type SiteFeatureProperties } from "./components/SiteDetail";
+import { exportPrioritizationCsv, exportPrioritizationGeoJson } from "./lib/export";
+import type { HazardType, PrioritizationItem, Session, Summary, Tier } from "./types";
+
+const ALL_HAZARDS_VISIBLE: Record<HazardType, boolean> = {
+  landslide: true,
+  flood: true,
+  coastal_erosion: true,
+  cloudburst: true,
+};
 
 function App() {
   const [session, setSession] = useState<Session | null>(null);
@@ -15,7 +25,13 @@ function App() {
   const [prioritization, setPrioritization] = useState<PrioritizationItem[]>([]);
   const [summary, setSummary] = useState<Summary | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [selectedSiteId, setSelectedSiteId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const [districtFilter, setDistrictFilter] = useState("");
+  const [tierFilter, setTierFilter] = useState<Tier | "">("");
+  const [hazardVisibility, setHazardVisibility] = useState(ALL_HAZARDS_VISIBLE);
+  const [hazardOpacity, setHazardOpacity] = useState(0.45);
 
   const canSeeHabitationData = session?.role === "admin" || session?.role === "state_official";
 
@@ -32,7 +48,8 @@ function App() {
         setSites(siteData);
 
         if (canSeeHabitationData && session) {
-          const [hab, prio] = await Promise.all([getHabitations(session), getPrioritization(session)]);
+          const filters = { district: districtFilter || undefined, tier: tierFilter || undefined };
+          const [hab, prio] = await Promise.all([getHabitations(session, filters), getPrioritization(session, filters)]);
           if (cancelled) return;
           setHabitations(hab);
           setPrioritization(prio);
@@ -46,13 +63,27 @@ function App() {
     return () => {
       cancelled = true;
     };
-  }, [session, canSeeHabitationData]);
+  }, [session, canSeeHabitationData, districtFilter, tierFilter]);
 
-  const handleSelect = useCallback((id: string) => setSelectedId(id), []);
+  const handleSelect = useCallback((id: string) => {
+    setSelectedId(id);
+    setSelectedSiteId(null);
+  }, []);
+
+  const handleSelectSite = useCallback((id: string) => {
+    setSelectedSiteId(id);
+    setSelectedId(null);
+  }, []);
+
+  const handleToggleHazard = useCallback((type: HazardType) => {
+    setHazardVisibility((prev) => ({ ...prev, [type]: !prev[type] }));
+  }, []);
 
   if (!session) {
     return <LoginScreen onLogin={setSession} />;
   }
+
+  const selectedSiteFeature = sites?.features.find((f) => String(f.id) === selectedSiteId);
 
   return (
     <div className="dashboard">
@@ -80,6 +111,19 @@ function App() {
         </div>
       )}
 
+      {canSeeHabitationData && (
+        <Filters
+          district={districtFilter}
+          onDistrictChange={setDistrictFilter}
+          tier={tierFilter}
+          onTierChange={setTierFilter}
+          hazardVisibility={hazardVisibility}
+          onToggleHazard={handleToggleHazard}
+          opacity={hazardOpacity}
+          onOpacityChange={setHazardOpacity}
+        />
+      )}
+
       <div className="dashboard-body">
         <div className="map-column">
           <MapView
@@ -87,11 +131,26 @@ function App() {
             habitations={canSeeHabitationData ? habitations : null}
             sites={sites}
             onSelectHabitation={handleSelect}
+            onSelectSite={handleSelectSite}
+            hazardVisibility={hazardVisibility}
+            hazardOpacity={hazardOpacity}
           />
           <Legend />
+          {selectedSiteFeature && (
+            <div className="site-detail-overlay">
+              <SiteDetail
+                site={selectedSiteFeature.properties as unknown as SiteFeatureProperties}
+                onClose={() => setSelectedSiteId(null)}
+              />
+            </div>
+          )}
         </div>
         {canSeeHabitationData && (
           <div className="side-column">
+            <div className="export-bar">
+              <button onClick={() => exportPrioritizationCsv(prioritization)}>Export CSV</button>
+              <button onClick={() => exportPrioritizationGeoJson(prioritization, habitations)}>Export GeoJSON</button>
+            </div>
             <PrioritizationPanel items={prioritization} selectedId={selectedId} onSelect={handleSelect} />
           </div>
         )}

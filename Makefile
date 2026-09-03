@@ -1,4 +1,4 @@
-.PHONY: install dev-backend dev-frontend docker-up docker-down
+.PHONY: install dev-backend dev-frontend docker-up docker-down migrate ingest score prioritize seed test
 
 install:
 	cd backend && npm install
@@ -16,7 +16,20 @@ docker-up:
 docker-down:
 	docker compose down
 
-# `make ingest`, `make score`, and `make prioritize` land with the Phase 1-5
-# data pipeline (see README) — not implemented yet; Phase 0 ships an
-# in-memory seed dataset instead so the API and dashboard have something to
-# render.
+migrate:
+	cd backend && npx prisma migrate deploy
+
+ingest:
+	cd backend && npm run ingest
+
+score:
+	cd backend && npm run score
+
+prioritize:
+	cd backend && npm run prioritize
+
+seed:
+	cd backend && npm run seed:users
+
+test:
+	cd backend && npm test

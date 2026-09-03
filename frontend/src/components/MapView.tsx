@@ -1,6 +1,7 @@
 import * as maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useRef } from "react";
+import type { HazardType } from "../types";
 
 const HAZARD_COLORS: Record<string, string> = {
   landslide: "#b0413e",
@@ -14,9 +15,20 @@ interface MapViewProps {
   habitations: GeoJSON.FeatureCollection | null;
   sites: GeoJSON.FeatureCollection | null;
   onSelectHabitation: (id: string) => void;
+  onSelectSite?: (id: string) => void;
+  hazardVisibility?: Record<HazardType, boolean>;
+  hazardOpacity?: number;
 }
 
-export function MapView({ hazardZones, habitations, sites, onSelectHabitation }: MapViewProps) {
+export function MapView({
+  hazardZones,
+  habitations,
+  sites,
+  onSelectHabitation,
+  onSelectSite,
+  hazardVisibility,
+  hazardOpacity = 0.45,
+}: MapViewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
 
@@ -87,6 +99,20 @@ export function MapView({ hazardZones, habitations, sites, onSelectHabitation }:
 
   useEffect(() => {
     const map = mapRef.current;
+    if (!map || !map.getLayer("hazard-zones-fill")) return;
+
+    map.setPaintProperty("hazard-zones-fill", "fill-opacity", hazardOpacity);
+
+    if (hazardVisibility) {
+      const visibleTypes = (Object.keys(hazardVisibility) as HazardType[]).filter((t) => hazardVisibility[t]);
+      const filter: maplibregl.FilterSpecification = ["in", ["get", "hazardType"], ["literal", visibleTypes]];
+      map.setFilter("hazard-zones-fill", filter);
+      map.setFilter("hazard-zones-outline", filter);
+    }
+  }, [hazardVisibility, hazardOpacity, hazardZones]);
+
+  useEffect(() => {
+    const map = mapRef.current;
     if (!map || !sites) return;
     const apply = () => {
       if (map.getSource("sites")) {
@@ -100,10 +126,20 @@ export function MapView({ hazardZones, habitations, sites, onSelectHabitation }:
         source: "sites",
         paint: { "fill-color": "#2f855a", "fill-opacity": 0.35 },
       });
+      map.on("click", "sites-fill", (e: maplibregl.MapLayerMouseEvent) => {
+        const id = e.features?.[0]?.properties?.id;
+        if (id) onSelectSite?.(String(id));
+      });
+      map.on("mouseenter", "sites-fill", () => {
+        map.getCanvas().style.cursor = "pointer";
+      });
+      map.on("mouseleave", "sites-fill", () => {
+        map.getCanvas().style.cursor = "";
+      });
     };
     if (map.isStyleLoaded()) apply();
     else map.once("load", apply);
-  }, [sites]);
+  }, [sites, onSelectSite]);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -134,7 +170,7 @@ export function MapView({ hazardZones, habitations, sites, onSelectHabitation }:
         },
       });
       map.on("click", "habitations-points", (e: maplibregl.MapLayerMouseEvent) => {
-        const id = e.features?.[0]?.id;
+        const id = e.features?.[0]?.properties?.id;
         if (id) onSelectHabitation(String(id));
       });
       map.on("mouseenter", "habitations-points", () => {

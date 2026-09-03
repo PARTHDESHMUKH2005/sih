@@ -1,10 +1,11 @@
+import type { Role } from "@prisma/client";
 import type { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import type { Role } from "../data/users.js";
 
 const ACCESS_SECRET = process.env.JWT_ACCESS_SECRET ?? "dev-only-insecure-secret";
 
 export interface AuthClaims {
+  userId: string;
   email: string;
   role: Role;
   stateCode: string | null;
