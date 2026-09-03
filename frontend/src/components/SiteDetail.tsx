@@ -39,14 +39,19 @@ export function SiteDetail({ site, onClose }: SiteDetailProps) {
         Suitability <strong>{site.suitabilityScore}</strong> · Capacity{" "}
         <strong>{site.capacityPersons.toLocaleString()}</strong> persons
       </p>
-      <ul className="sub-score-list">
+      <div className="sub-score-list">
         {SUB_SCORE_LABELS.map(([key, label]) => (
-          <li key={key}>
-            <span>{label}</span>
-            <span>{site.subScores[key]}</span>
-          </li>
+          <div className="sub-score-row" key={key}>
+            <div className="sub-score-row-header">
+              <span>{label}</span>
+              <span>{site.subScores[key]}</span>
+            </div>
+            <div className="sub-score-bar-track">
+              <div className="sub-score-bar-fill" style={{ width: `${site.subScores[key]}%` }} />
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }

@@ -1,14 +1,14 @@
 const HAZARD_ITEMS: [string, string][] = [
-  ["Landslide", "#b0413e"],
-  ["Flood", "#2b6cb0"],
-  ["Coastal erosion", "#805ad5"],
-  ["Cloudburst", "#38a169"],
+  ["Landslide", "#a6423a"],
+  ["Flood", "#2a5f9e"],
+  ["Coastal erosion", "#6b4c9a"],
+  ["Cloudburst", "#2f8f5b"],
 ];
 
 const TIER_ITEMS: [string, string][] = [
-  ["Immediate", "#c53030"],
-  ["Short-term", "#dd6b20"],
-  ["Medium-term", "#d69e2e"],
+  ["Immediate", "#b3261e"],
+  ["Short-term", "#c26a1d"],
+  ["Medium-term", "#a3821a"],
 ];
 
 export function Legend() {
