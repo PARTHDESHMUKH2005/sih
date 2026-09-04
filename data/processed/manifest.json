@@ -1,0 +1,45 @@
+{
+  "cwc_flood_and_hazard_zones": {
+    "source": "cwc_flood_and_hazard_zones",
+    "fetchedAt": "2026-09-04T16:40:25.434Z",
+    "spatialExtent": [
+      77.695,
+      19.7892,
+      86.952,
+      31.043722
+    ],
+    "crs": "EPSG:4326",
+    "sha256": "75c0b96a790710a9d0abe77741d4718cb50032d89710ca3de0f23d02593c5a56"
+  },
+  "census2011_habitations": {
+    "source": "census2011_habitations",
+    "fetchedAt": "2026-09-04T16:40:25.439Z",
+    "spatialExtent": [
+      78.4469,
+      19.805,
+      86.935,
+      30.7292
+    ],
+    "crs": "EPSG:4326",
+    "sha256": "87e6199c05a8d0b86a68306701a16bce078238c6620f2facf9c4a536c9751d6a"
+  },
+  "relocation_sites": {
+    "source": "relocation_sites",
+    "fetchedAt": "2026-09-04T16:40:25.441Z",
+    "spatialExtent": [
+      79.147,
+      20.5573,
+      86.833,
+      30.5327
+    ],
+    "crs": "EPSG:4326",
+    "sha256": "5edfeb108dbb9ea14dccf11b74a5a301d65c0900dbae8ba7551186f2af11fafe"
+  },
+  "disaster_events": {
+    "source": "disaster_events",
+    "fetchedAt": "2026-09-04T16:40:25.444Z",
+    "spatialExtent": null,
+    "crs": "EPSG:4326",
+    "sha256": "3c6d90bfccdb4359e3ed5c9eb3aeab7780bd4f295b6ad38aa41811b975543c68"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "hazard_factors": {
+    "source": "hazard_factors",
+    "fetchedAt": "2026-09-04T14:32:03.095Z",
+    "spatialExtent": [
+      78.38,
+      30.28,
+      78.55,
+      30.39
+    ],
+    "crs": "EPSG:4326",
+    "sha256": "7838573f6309de59fbc99f43c267621855c2fd6215aa8b9c53d3ab26226e4ec6"
+  },
+  "habitations": {
+    "source": "habitations",
+    "fetchedAt": "2026-09-04T14:32:03.097Z",
+    "spatialExtent": [
+      78.395,
+      30.295,
+      78.52,
+      30.375
+    ],
+    "crs": "EPSG:4326",
+    "sha256": "3c3ff33ba89f8f51ba8088bc4dd235939c736161116077869d72e25bb2efe1b0"
+  },
+  "relocation_sites": {
+    "source": "relocation_sites",
+    "fetchedAt": "2026-09-04T14:32:03.097Z",
+    "spatialExtent": [
+      78.44,
+      30.4,
+      78.482,
+      30.4115
+    ],
+    "crs": "EPSG:4326",
+    "sha256": "61b5f561272a4ee117389c6fd7d50bcff6ee2b966e4ce81a6308cf3d928c97f7"
+  },
+  "disaster_events": {
+    "source": "disaster_events",
+    "fetchedAt": "2026-09-04T14:32:03.098Z",
+    "spatialExtent": null,
+    "crs": "EPSG:4326",
+    "sha256": "7265ae246c03a316a4fb0cab6dbc60872de7a262cf5f9aad7394062c4d70d316"
+  }
+}
