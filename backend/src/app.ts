@@ -10,6 +10,7 @@ import { hazardsRouter } from "./routes/hazards.js";
 import { prioritizationRouter } from "./routes/prioritization.js";
 import { sitesRouter } from "./routes/sites.js";
 import { summaryRouter } from "./routes/summary.js";
+import { translateRouter } from "./routes/translate.js";
 
 export const app = express();
 
@@ -25,3 +26,4 @@ app.use("/api/habitations", habitationsRouter);
 app.use("/api/prioritization", prioritizationRouter);
 app.use("/api/sites", sitesRouter);
 app.use("/api/summary", summaryRouter);
+app.use("/api/translate", translateRouter);

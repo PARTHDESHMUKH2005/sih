@@ -35,6 +35,7 @@ export interface Summary {
   level: string;
   state?: string;
   district?: string;
+  districtCount?: number;
   habitationCount: number;
   totalPopulationExposed: number;
   tierCounts: Record<string, number>;

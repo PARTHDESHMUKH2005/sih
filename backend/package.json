@@ -10,6 +10,8 @@
     "lint": "eslint src --ext .ts",
     "test": "vitest run",
     "ingest": "tsx scripts/ingest.ts",
+    "data:build": "python3 scripts/build_real_data.py",
+    "ingest:real": "tsx scripts/ingest-real.ts",
     "score": "tsx scripts/score.ts",
     "prioritize": "tsx scripts/prioritize.ts",
     "seed:users": "tsx scripts/seedUsers.ts",

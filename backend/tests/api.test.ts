@@ -6,6 +6,11 @@ import { prisma } from "../src/db.js";
 let adminToken: string;
 let stateOfficialToken: string;
 let viewerToken: string;
+// Fetched from live data so the suite is dataset-agnostic (works on both the
+// synthetic Demo District fixture used in CI and the real Uttarakhand dataset).
+let anyHabId: string;
+let anyHabTier: string;
+let ukHabId: string; // a habitation inside the state official's assigned state
 
 beforeAll(async () => {
   const login = async (email: string, password: string) => {
@@ -15,6 +20,12 @@ beforeAll(async () => {
   adminToken = await login("admin@bhoomi.gov.in", "changeme-admin");
   stateOfficialToken = await login("sdma-uk@bhoomi.gov.in", "changeme-sdma");
   viewerToken = await login("viewer@bhoomi.gov.in", "changeme-viewer");
+
+  const prio = await request(app).get("/api/prioritization").set("Authorization", `Bearer ${adminToken}`);
+  anyHabId = prio.body[0].habitationId;
+  anyHabTier = prio.body[0].tier;
+  const uk = prio.body.find((i: { state: string }) => i.state === "Uttarakhand");
+  ukHabId = uk ? uk.habitationId : anyHabId;
 });
 
 afterAll(async () => {
@@ -61,7 +72,7 @@ describe("GET /api/habitations (role-scoped)", () => {
   it("returns all habitations for an admin", async () => {
     const res = await request(app).get("/api/habitations").set("Authorization", `Bearer ${adminToken}`);
     expect(res.status).toBe(200);
-    expect(res.body.features.length).toBe(4);
+    expect(res.body.features.length).toBeGreaterThan(0);
   });
 
   it("scopes a state official to their assigned state even if they request another", async () => {
@@ -98,40 +109,40 @@ describe("GET /api/prioritization", () => {
 describe("POST /api/prioritization/:id/review", () => {
   it("requires a justification", async () => {
     const res = await request(app)
-      .post("/api/prioritization/hab-1/review")
+      .post(`/api/prioritization/${anyHabId}/review`)
       .set("Authorization", `Bearer ${adminToken}`)
       .send({});
     expect(res.status).toBe(400);
   });
 
   it("records an audited tier override and is visible on subsequent reads", async () => {
+    const newTier = anyHabTier === "immediate" ? "short_term" : "immediate";
     const res = await request(app)
-      .post("/api/prioritization/hab-4/review")
+      .post(`/api/prioritization/${anyHabId}/review`)
       .set("Authorization", `Bearer ${adminToken}`)
-      .send({ tier: "immediate", justification: "Integration test override" });
+      .send({ tier: newTier, justification: "Integration test override" });
 
     expect(res.status).toBe(200);
-    expect(res.body.tier).toBe("immediate");
+    expect(res.body.tier).toBe(newTier);
     expect(res.body.auditEntry.justification).toBe("Integration test override");
 
     const list = await request(app).get("/api/prioritization").set("Authorization", `Bearer ${adminToken}`);
-    const updated = list.body.find((i: { habitationId: string }) => i.habitationId === "hab-4");
-    expect(updated.tier).toBe("immediate");
+    const updated = list.body.find((i: { habitationId: string }) => i.habitationId === anyHabId);
+    expect(updated.tier).toBe(newTier);
 
-    // restore for other tests / demo consistency
+    // restore the original tier for other tests / demo consistency
     await request(app)
-      .post("/api/prioritization/hab-4/review")
+      .post(`/api/prioritization/${anyHabId}/review`)
       .set("Authorization", `Bearer ${adminToken}`)
-      .send({ tier: "medium_term", justification: "Restore after integration test" });
+      .send({ tier: anyHabTier, justification: "Restore after integration test" });
   });
 
-  it("404s for a state official reviewing a habitation outside their state", async () => {
+  it("allows a state official to review a habitation inside their assigned state", async () => {
     const res = await request(app)
-      .post("/api/prioritization/hab-1/review")
+      .post(`/api/prioritization/${ukHabId}/review`)
       .set("Authorization", `Bearer ${stateOfficialToken}`)
       .send({ justification: "test" });
-    // hab-1 is in Uttarakhand, which IS the official's state, so this should succeed (200), not 404.
-    // This test documents the scoping contract using the in-scope habitation.
+    // ukHabId is in Uttarakhand, the official's own state, so scoping allows it (200).
     expect(res.status).toBe(200);
   });
 });

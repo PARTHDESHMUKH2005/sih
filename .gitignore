@@ -2,3 +2,9 @@ data/raw/
 data/processed/
 .env
 .DS_Store
+
+# stray raw source downloads (keep large binaries out of git; real fixtures live
+# under backend/fixtures/raw/ instead)
+*.nc
+*.xlsx
+*.xls

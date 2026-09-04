@@ -498,6 +498,32 @@ npm run dev
 Re-running `npm run ingest` is idempotent (skips sources whose fixture hash hasn't changed) — the
 "continuously updated" requirement is `ingest && score && prioritize` re-run whenever new data lands.
 
+#### Real-data path (Uttarakhand)
+
+The synthetic Demo District above is the deterministic fixture used by the test suite and CI.
+A **real-data pipeline for Uttarakhand** is also included, built from two credentialed public
+sources (converted to CSV under `data/raw/`):
+
+- **CWC flood-forecast station network** — 76 real Uttarakhand stations (real name, river, basin,
+  lat/long) → real flood hazard zones + landslide/cloudburst zones at NRSC-Atlas hotspots.
+- **Census of India 2011 Primary Census Abstract** — real population and demographic vulnerability
+  (under-6, SC/ST, literacy) matched to real towns (Joshimath, Srinagar, Rudraprayag, …).
+- Real documented disaster events (2013 Kedarnath, 2021 Chamoli, 2023 Joshimath subsidence).
+
+```bash
+cd backend
+npm run data:build     # (dev-time) rebuild real fixtures from data/raw CSVs — needs python3 + pandas
+npm run ingest:real    # ingest the real Uttarakhand fixtures -> data/processed
+npm run score
+npm run prioritize
+```
+
+With this dataset the prioritization engine ranks **Joshimath as "Immediate"**, driven by real
+Census population and real disaster history — a concrete, checkable demo. Per-hazard AHP *factor*
+scores remain regional proxies pending DEM/IMD/Bhukosh rasters (which need Bhuvan/Bhoonidhi
+credentials); geometry, rivers, population, and disaster history are real. Provenance is recorded
+per record in the generated fixtures and in `data/processed/manifest.json`.
+
 ### Running tests
 
 ```bash

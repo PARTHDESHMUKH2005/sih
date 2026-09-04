@@ -10,6 +10,23 @@ const HAZARD_COLORS: Record<string, string> = {
   cloudburst: "#2f8f5b",
 };
 
+/** Bounding box of every coordinate in a FeatureCollection, or null if empty. */
+function boundsOf(fc: GeoJSON.FeatureCollection): maplibregl.LngLatBoundsLike | null {
+  let minLng = Infinity, minLat = Infinity, maxLng = -Infinity, maxLat = -Infinity;
+  const walk = (c: unknown): void => {
+    if (Array.isArray(c) && typeof c[0] === "number" && typeof c[1] === "number") {
+      const [lng, lat] = c as [number, number];
+      minLng = Math.min(minLng, lng); minLat = Math.min(minLat, lat);
+      maxLng = Math.max(maxLng, lng); maxLat = Math.max(maxLat, lat);
+    } else if (Array.isArray(c)) {
+      c.forEach(walk);
+    }
+  };
+  for (const f of fc.features) if (f.geometry && "coordinates" in f.geometry) walk(f.geometry.coordinates);
+  if (!Number.isFinite(minLng)) return null;
+  return [[minLng, minLat], [maxLng, maxLat]];
+}
+
 interface MapViewProps {
   hazardZones: GeoJSON.FeatureCollection | null;
   habitations: GeoJSON.FeatureCollection | null;
@@ -31,6 +48,7 @@ export function MapView({
 }: MapViewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
+  const fittedRef = useRef(false);
 
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
@@ -62,7 +80,17 @@ export function MapView({
     const map = mapRef.current;
     if (!map || !hazardZones) return;
 
+    const fitToData = () => {
+      if (fittedRef.current) return;
+      const b = boundsOf(hazardZones);
+      if (b) {
+        map.fitBounds(b, { padding: 50, maxZoom: 12, duration: 0 });
+        fittedRef.current = true;
+      }
+    };
+
     const apply = () => {
+      fitToData();
       if (map.getSource("hazard-zones")) {
         (map.getSource("hazard-zones") as maplibregl.GeoJSONSource).setData(hazardZones);
         return;

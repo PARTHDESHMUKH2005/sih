@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import "./App.css";
-import { getHazardZones, getHabitations, getPrioritization, getSites, getSummary } from "./api";
+import { getHazardZones, getHabitations, getPrioritization, getSites, getSummary, type SimulationResult } from "./api";
 import { BrandMark } from "./components/BrandMark";
 import { Filters } from "./components/Filters";
 import { Legend } from "./components/Legend";
@@ -8,6 +8,8 @@ import { LoginScreen } from "./components/LoginScreen";
 import { MapView } from "./components/MapView";
 import { PrioritizationPanel } from "./components/PrioritizationPanel";
 import { SiteDetail, type SiteFeatureProperties } from "./components/SiteDetail";
+import { WhatIfSlider } from "./components/WhatIfSlider";
+import { useI18n } from "./i18n";
 import { exportPrioritizationCsv, exportPrioritizationGeoJson } from "./lib/export";
 import type { HazardType, PrioritizationItem, Session, Summary, Tier } from "./types";
 
@@ -19,7 +21,9 @@ const ALL_HAZARDS_VISIBLE: Record<HazardType, boolean> = {
 };
 
 function App() {
+  const { t, lang, setLang, loading: langLoading } = useI18n();
   const [session, setSession] = useState<Session | null>(null);
+  const [simResults, setSimResults] = useState<SimulationResult["results"] | null>(null);
   const [hazardZones, setHazardZones] = useState<GeoJSON.FeatureCollection | null>(null);
   const [habitations, setHabitations] = useState<GeoJSON.FeatureCollection | null>(null);
   const [sites, setSites] = useState<GeoJSON.FeatureCollection | null>(null);
@@ -36,9 +40,42 @@ function App() {
 
   const canSeeHabitationData = session?.role === "admin" || session?.role === "state_official";
 
+  // What-if simulation overlay: when active, override each habitation's tier/score
+  // with the simulated values (keeping the baseline suggested sites and geometry).
+  const displayedPrioritization = useMemo<PrioritizationItem[]>(() => {
+    if (!simResults) return prioritization;
+    const baseById = new Map(prioritization.map((p) => [p.habitationId, p]));
+    return simResults.map((r) => ({
+      ...(baseById.get(r.habitationId) as PrioritizationItem | undefined),
+      habitationId: r.habitationId,
+      name: r.name,
+      state: r.state,
+      district: r.district,
+      population: r.population,
+      tier: r.tier,
+      priorityScore: r.priorityScore,
+      componentScores: r.componentScores,
+      suggestedSites: baseById.get(r.habitationId)?.suggestedSites ?? [],
+    }));
+  }, [simResults, prioritization]);
+
+  const displayedHabitations = useMemo<GeoJSON.FeatureCollection | null>(() => {
+    if (!simResults || !habitations) return habitations;
+    const tierById = new Map(simResults.map((r) => [r.habitationId, r.tier]));
+    return {
+      ...habitations,
+      features: habitations.features.map((f) => {
+        const id = String(f.properties?.id);
+        const tier = tierById.get(id);
+        return tier ? { ...f, properties: { ...f.properties, tier } } : f;
+      }),
+    };
+  }, [simResults, habitations]);
+
   useEffect(() => {
     if (!session) return;
     let cancelled = false;
+    setSimResults(null); // clear any what-if overlay when the base data reloads
 
     async function load() {
       try {
@@ -94,10 +131,18 @@ function App() {
           <h1>Bhoomi Suraksha</h1>
         </div>
         <div className="topbar-right">
-          <span className="role-badge">{session.role.replace("_", " ")}</span>
+          <div className="lang-toggle" role="group" aria-label={t("Language")}>
+            <button className={lang === "en" ? "active" : ""} onClick={() => setLang("en")} disabled={langLoading}>
+              {t("English")}
+            </button>
+            <button className={lang === "hi" ? "active" : ""} onClick={() => setLang("hi")} disabled={langLoading}>
+              {langLoading ? "…" : t("हिन्दी")}
+            </button>
+          </div>
+          <span className="role-badge">{t(session.role.replace("_", " "))}</span>
           {session.stateCode && <span className="state-badge">{session.stateCode}</span>}
           <button className="logout-button" onClick={() => setSession(null)}>
-            Sign out
+            {t("Sign out")}
           </button>
         </div>
       </header>
@@ -107,21 +152,22 @@ function App() {
       {summary && (
         <div className="stat-row">
           <div className="stat-card stat-card-wide">
-            <span className="stat-label">District</span>
+            <span className="stat-label">{t("Region")}</span>
             <span className="stat-value stat-value-text">
-              {summary.district}, {summary.state}
+              {summary.state}
+              {summary.districtCount ? ` · ${summary.districtCount} ${t("districts")}` : ""}
             </span>
           </div>
           <div className="stat-card">
-            <span className="stat-label">Habitations</span>
+            <span className="stat-label">{t("Habitations")}</span>
             <span className="stat-value">{summary.habitationCount}</span>
           </div>
           <div className="stat-card">
-            <span className="stat-label">People exposed</span>
+            <span className="stat-label">{t("People exposed")}</span>
             <span className="stat-value">{summary.totalPopulationExposed.toLocaleString()}</span>
           </div>
           <div className="stat-card">
-            <span className="stat-label">Hazard zones</span>
+            <span className="stat-label">{t("Hazard zones")}</span>
             <span className="stat-value">{summary.hazardZoneCount}</span>
           </div>
         </div>
@@ -144,7 +190,7 @@ function App() {
         <div className="map-column">
           <MapView
             hazardZones={hazardZones}
-            habitations={canSeeHabitationData ? habitations : null}
+            habitations={canSeeHabitationData ? displayedHabitations : null}
             sites={sites}
             onSelectHabitation={handleSelect}
             onSelectSite={handleSelectSite}
@@ -161,22 +207,30 @@ function App() {
             </div>
           )}
         </div>
-        {canSeeHabitationData && (
+        {canSeeHabitationData && session && (
           <div className="side-column">
+            <WhatIfSlider
+              session={session}
+              onResults={(results) => setSimResults(results)}
+              onReset={() => setSimResults(null)}
+            />
             <div className="export-bar">
-              <button onClick={() => exportPrioritizationCsv(prioritization)}>Export CSV</button>
-              <button onClick={() => exportPrioritizationGeoJson(prioritization, habitations)}>Export GeoJSON</button>
+              <button onClick={() => exportPrioritizationCsv(displayedPrioritization)}>{t("Export CSV")}</button>
+              <button onClick={() => exportPrioritizationGeoJson(displayedPrioritization, displayedHabitations)}>
+                {t("Export GeoJSON")}
+              </button>
             </div>
-            <PrioritizationPanel items={prioritization} selectedId={selectedId} onSelect={handleSelect} />
+            <PrioritizationPanel items={displayedPrioritization} selectedId={selectedId} onSelect={handleSelect} />
           </div>
         )}
         {!canSeeHabitationData && (
           <div className="side-column">
             <div className="panel">
-              <h3>Public view</h3>
+              <h3>{t("Public view")}</h3>
               <p>
-                Aggregated Red Zone map and district summary only. Habitation-level records and
-                prioritization lists require a State DM Authority or NDRF/MHA login.
+                {t(
+                  "Aggregated Red Zone map and district summary only. Habitation-level records and prioritization lists require a State DM Authority or NDRF/MHA login.",
+                )}
               </p>
             </div>
           </div>

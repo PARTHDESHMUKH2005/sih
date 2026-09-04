@@ -1,3 +1,4 @@
+import { useI18n } from "../i18n";
 import type { HazardType, Tier } from "../types";
 
 const HAZARD_LABELS: Record<HazardType, string> = {
@@ -35,38 +36,39 @@ export function Filters({
   opacity,
   onOpacityChange,
 }: FiltersProps) {
+  const { t } = useI18n();
   return (
     <div className="filters-bar">
       <label className="filter-field">
-        District
-        <input value={district} onChange={(e) => onDistrictChange(e.target.value)} placeholder="Any district" />
+        {t("District")}
+        <input value={district} onChange={(e) => onDistrictChange(e.target.value)} placeholder={t("Any district")} />
       </label>
 
       <label className="filter-field">
-        Tier
+        {t("Tier")}
         <select value={tier} onChange={(e) => onTierChange(e.target.value as Tier | "")}>
           {TIER_OPTIONS.map((opt) => (
             <option key={opt.value} value={opt.value}>
-              {opt.label}
+              {t(opt.label)}
             </option>
           ))}
         </select>
       </label>
 
       <div className="filter-field">
-        Hazard layers
+        {t("Hazard layers")}
         <div className="hazard-toggles">
           {(Object.keys(HAZARD_LABELS) as HazardType[]).map((type) => (
             <label key={type} className="hazard-toggle">
               <input type="checkbox" checked={hazardVisibility[type]} onChange={() => onToggleHazard(type)} />
-              {HAZARD_LABELS[type]}
+              {t(HAZARD_LABELS[type])}
             </label>
           ))}
         </div>
       </div>
 
       <label className="filter-field">
-        Zone opacity
+        {t("Zone opacity")}
         <input
           type="range"
           min={0.1}

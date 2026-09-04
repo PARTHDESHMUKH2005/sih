@@ -56,3 +56,35 @@ export function getHabitations(session: Session, filters: PrioritizationFilters 
 export function getSites() {
   return authedFetch("/sites", null) as Promise<GeoJSON.FeatureCollection>;
 }
+
+export interface SimulationResult {
+  rainfallMultiplier: number;
+  results: {
+    habitationId: string;
+    name: string;
+    state: string;
+    district: string;
+    population: number;
+    tier: import("./types").Tier;
+    priorityScore: number;
+    componentScores: PrioritizationItem["componentScores"];
+  }[];
+}
+
+export function simulatePrioritization(session: Session, rainfall: number, state?: string) {
+  return authedFetch("/prioritization/simulate", session, {
+    rainfall: String(rainfall),
+    state,
+  }) as Promise<SimulationResult>;
+}
+
+export async function translateStrings(texts: string[], target = "hi-IN"): Promise<string[]> {
+  const res = await fetch(`${API_BASE}/translate`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ texts, target }),
+  });
+  if (!res.ok) return texts; // graceful fallback to English
+  const data = await res.json();
+  return (data.translations as string[]) ?? texts;
+}
