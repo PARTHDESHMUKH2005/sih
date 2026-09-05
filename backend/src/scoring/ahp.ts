@@ -50,3 +50,19 @@ export function computeHazardSeverity(
 
   return Math.round(severity * 100) / 100;
 }
+
+/**
+ * Blend machine learning susceptibility score with deterministic AHP score.
+ * Formula: mlScore * mlWeight + ahpScore * (1 - mlWeight)
+ * Result is rounded to 2 decimal places and bounded to [0, 100].
+ */
+export function computeBlendedSeverity(
+  ahpScore: number,
+  mlScore: number,
+  mlWeight = 0.6,
+): number {
+  const boundedWeight = Math.max(0, Math.min(1, mlWeight));
+  const blended = mlScore * boundedWeight + ahpScore * (1 - boundedWeight);
+  return Math.max(0, Math.min(100, Math.round(blended * 100) / 100));
+}
+

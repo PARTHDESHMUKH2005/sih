@@ -1,0 +1,35 @@
+{
+  "version": "1.0.0",
+  "trained_at": null,
+  "winning_model": null,
+  "features": [
+    "catchment_area",
+    "distance_to_drainage",
+    "elevation",
+    "land_cover",
+    "lithology",
+    "rainfall_intensity",
+    "shoreline_change_rate",
+    "slope",
+    "soil_permeability",
+    "wave_energy",
+    "is_flood",
+    "is_landslide",
+    "is_cloudburst",
+    "is_coastal_erosion"
+  ],
+  "num_features": 14,
+  "hazard_types": [
+    "flood",
+    "landslide",
+    "cloudburst",
+    "coastal_erosion"
+  ],
+  "sample_counts": {
+    "total": 86,
+    "positive": 12,
+    "negative": 74
+  },
+  "cv_folds": 5,
+  "onnx_file": "susceptibility.onnx"
+}

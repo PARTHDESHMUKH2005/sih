@@ -2,7 +2,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { computeHazardSeverity, loadAhpWeights, type AhpConfig } from "./ahp.js";
+import { computeHazardSeverity, loadAhpWeights, computeBlendedSeverity, type AhpConfig } from "./ahp.js";
 
 const landslideConfig: AhpConfig = {
   landslide: {
@@ -64,3 +64,21 @@ describe("loadAhpWeights", () => {
     fs.unlinkSync(file);
   });
 });
+
+describe("computeBlendedSeverity", () => {
+  it("computes weighted blend with default 0.6 ML weight", () => {
+    // 0.6 * 80 + 0.4 * 60 = 48 + 24 = 72
+    expect(computeBlendedSeverity(60, 80)).toBe(72);
+  });
+
+  it("computes weighted blend with custom weight", () => {
+    // 0.8 * 90 + 0.2 * 50 = 72 + 10 = 82
+    expect(computeBlendedSeverity(50, 90, 0.8)).toBe(82);
+  });
+
+  it("clamps blended score to [0, 100]", () => {
+    expect(computeBlendedSeverity(100, 100)).toBe(100);
+    expect(computeBlendedSeverity(0, 0)).toBe(0);
+  });
+});
+

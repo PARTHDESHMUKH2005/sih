@@ -1,4 +1,4 @@
-.PHONY: install dev-backend dev-frontend docker-up docker-down migrate ingest score prioritize seed test
+.PHONY: install dev-backend dev-frontend docker-up docker-down migrate ingest score prioritize seed test ml-train ml-predict ml-score
 
 install:
 	cd backend && npm install
@@ -33,3 +33,13 @@ seed:
 
 test:
 	cd backend && npm test
+
+ml-train:
+	python3 ml/train.py
+
+ml-predict:
+	python3 ml/predict.py --demo
+
+ml-score:
+	cd backend && ENABLE_ML_SUSCEPTIBILITY=true npm run score
+
