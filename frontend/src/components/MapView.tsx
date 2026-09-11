@@ -2,12 +2,19 @@ import * as maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useRef } from "react";
 import type { HazardType } from "../types";
+import { RELOCATION_SITES, getHabitationSiteLinks } from "../data/relocationSites";
 
 const HAZARD_COLORS: Record<string, string> = {
   landslide: "#a6423a",
   flood: "#2a5f9e",
   coastal_erosion: "#6b4c9a",
   cloudburst: "#2f8f5b",
+};
+
+const RELOCATION_SITE_COLORS: Record<string, string> = {
+  "Suitable": "#22c55e",
+  "Conditional — needs investment": "#f59e0b",
+  "Not suitable": "#ef4444",
 };
 
 /** Bounding box of every coordinate in a FeatureCollection, or null if empty. */
@@ -27,12 +34,52 @@ function boundsOf(fc: GeoJSON.FeatureCollection): maplibregl.LngLatBoundsLike | 
   return [[minLng, minLat], [maxLng, maxLat]];
 }
 
+function createRelocationSiteGeoJSON(): GeoJSON.FeatureCollection {
+  return {
+    type: "FeatureCollection",
+    features: RELOCATION_SITES.map((site) => ({
+      type: "Feature",
+      id: site.id,
+      properties: {
+        id: site.id,
+        name: site.name,
+        status: site.status,
+        suitabilityScore: site.suitabilityScore,
+      },
+      geometry: {
+        type: "Point",
+        coordinates: [site.longitude, site.latitude],
+      },
+    })),
+  };
+}
+
+function createSiteLinkGeoJSON(): GeoJSON.FeatureCollection {
+  const links = getHabitationSiteLinks();
+  return {
+    type: "FeatureCollection",
+    features: links.map((link, idx) => ({
+      type: "Feature",
+      id: `link-${idx}`,
+      properties: {
+        from: link.from,
+        to: link.to,
+      },
+      geometry: {
+        type: "LineString",
+        coordinates: [link.fromCoords, link.toCoords],
+      },
+    })),
+  };
+}
+
 interface MapViewProps {
   hazardZones: GeoJSON.FeatureCollection | null;
   habitations: GeoJSON.FeatureCollection | null;
   sites: GeoJSON.FeatureCollection | null;
   onSelectHabitation: (id: string) => void;
   onSelectSite?: (id: string) => void;
+  onSelectRelocationSite?: (id: string) => void;
   hazardVisibility?: Record<HazardType, boolean>;
   hazardOpacity?: number;
 }
@@ -43,6 +90,7 @@ export function MapView({
   sites,
   onSelectHabitation,
   onSelectSite,
+  onSelectRelocationSite,
   hazardVisibility,
   hazardOpacity = 0.45,
 }: MapViewProps) {
@@ -222,6 +270,83 @@ export function MapView({
     if (map.isStyleLoaded()) apply();
     else map.once("load", apply);
   }, [habitations, onSelectHabitation]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+
+    const relocationSitesGeoJSON = createRelocationSiteGeoJSON();
+    const apply = () => {
+      if (map.getSource("relocation-sites")) {
+        (map.getSource("relocation-sites") as maplibregl.GeoJSONSource).setData(relocationSitesGeoJSON);
+        return;
+      }
+      map.addSource("relocation-sites", { type: "geojson", data: relocationSitesGeoJSON });
+      map.addLayer({
+        id: "relocation-sites-symbol",
+        type: "symbol",
+        source: "relocation-sites",
+        layout: {
+          "icon-image": "square",
+          "icon-size": 0.8,
+          "icon-allow-overlap": true,
+          "icon-ignore-placement": true,
+        },
+        paint: {
+          "icon-color": [
+            "match",
+            ["get", "status"],
+            "Suitable", RELOCATION_SITE_COLORS["Suitable"],
+            "Conditional — needs investment", RELOCATION_SITE_COLORS["Conditional — needs investment"],
+            "Not suitable", RELOCATION_SITE_COLORS["Not suitable"],
+            "#999999",
+          ],
+          "icon-halo-color": "#fff",
+          "icon-halo-width": 2,
+        },
+      });
+      map.on("click", "relocation-sites-symbol", (e: maplibregl.MapLayerMouseEvent) => {
+        const id = e.features?.[0]?.properties?.id;
+        if (id) onSelectRelocationSite?.(String(id));
+      });
+      map.on("mouseenter", "relocation-sites-symbol", () => {
+        map.getCanvas().style.cursor = "pointer";
+      });
+      map.on("mouseleave", "relocation-sites-symbol", () => {
+        map.getCanvas().style.cursor = "";
+      });
+    };
+    if (map.isStyleLoaded()) apply();
+    else map.once("load", apply);
+  }, [onSelectRelocationSite]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+
+    const linksGeoJSON = createSiteLinkGeoJSON();
+    const apply = () => {
+      if (map.getSource("site-links")) {
+        (map.getSource("site-links") as maplibregl.GeoJSONSource).setData(linksGeoJSON);
+        return;
+      }
+      map.addSource("site-links", { type: "geojson", data: linksGeoJSON });
+      map.addLayer({
+        id: "site-links-line",
+        type: "line",
+        source: "site-links",
+        layout: { "line-cap": "round", "line-join": "round" },
+        paint: {
+          "line-color": "#4ade80",
+          "line-width": 2,
+          "line-dasharray": [8, 4],
+          "line-opacity": 0.7,
+        },
+      });
+    };
+    if (map.isStyleLoaded()) apply();
+    else map.once("load", apply);
+  }, []);
 
   return <div ref={containerRef} className="map-container" />;
 }

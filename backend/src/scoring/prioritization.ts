@@ -22,7 +22,7 @@ export function computeDisasterHistoryScore(events: DisasterEventInput[]): numbe
   return Math.min(100, Math.round(weighted * 100) / 100);
 }
 
-const PRIORITY_WEIGHTS = { hazardSeverity: 0.35, exposure: 0.4, disasterHistory: 0.25 };
+export const PRIORITY_WEIGHTS = { hazardSeverity: 0.35, exposure: 0.4, disasterHistory: 0.25 };
 
 export function computePriorityScore(hazardSeverity: number, exposureScore: number, disasterHistoryScore: number): number {
   const score =

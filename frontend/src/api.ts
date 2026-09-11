@@ -68,6 +68,8 @@ export interface SimulationResult {
     tier: import("./types").Tier;
     priorityScore: number;
     componentScores: PrioritizationItem["componentScores"];
+    breakdown: PrioritizationItem["breakdown"];
+    weights: PrioritizationItem["weights"];
   }[];
 }
 
