@@ -1112,3 +1112,224 @@ body,
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+
+.sub-score-row-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.sub-score-bar-track {
+  height: 5px;
+  border-radius: 999px;
+  background: var(--surface-sunken);
+  overflow: hidden;
+}
+
+.sub-score-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--brand-500);
+}
+
+/* ── Detail panel (shared for habitation breakdown & site details) ──────────────── */
+
+.detail-panel-overlay {
+  margin-top: 1rem;
+  animation: slideIn 0.2s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.detail-panel {
+  box-shadow: var(--shadow-md);
+}
+
+.detail-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+  gap: 0.5rem;
+}
+
+.detail-panel-header h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  flex: 1;
+}
+
+.detail-panel-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+  font-size: 0.78rem;
+}
+
+.score {
+  color: var(--text-muted);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.location {
+  color: var(--text-faint);
+  font-size: 0.72rem;
+}
+
+.tier-badge {
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  color: #fff;
+  background: var(--text-faint);
+  white-space: nowrap;
+}
+
+.tier-badge.tier-immediate {
+  background: var(--tier-immediate);
+}
+
+.tier-badge.tier-short_term {
+  background: var(--tier-short);
+}
+
+.tier-badge.tier-medium_term {
+  background: var(--tier-medium);
+}
+
+.status-badge {
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.status-badge.status-suitable {
+  background: #22c55e;
+}
+
+.status-badge.status-conditional {
+  background: #f59e0b;
+}
+
+.status-badge.status-not-suitable {
+  background: #ef4444;
+}
+
+.factor-breakdown h4 {
+  margin: 0 0 0.5rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.factor-row {
+  margin-bottom: 0.55rem;
+}
+
+.factor-row:last-child {
+  margin-bottom: 0;
+}
+
+.factor-row-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.2rem;
+  font-size: 0.75rem;
+}
+
+.factor-label {
+  color: var(--text);
+  flex: 1;
+}
+
+.factor-value {
+  color: var(--text-muted);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.factor-weight {
+  color: var(--text-faint);
+  font-size: 0.65rem;
+  font-weight: 500;
+}
+
+.factor-bar-track {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--surface-sunken);
+  overflow: hidden;
+}
+
+.factor-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--brand-500);
+  transition: width 0.3s ease-out;
+}
+
+.weights-summary {
+  margin-top: 0.85rem;
+  padding-top: 0.75rem;
+  border-top: 1px dashed var(--border);
+}
+
+.weights-summary h5 {
+  margin: 0 0 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.weights-summary ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  font-size: 0.72rem;
+}
+
+.weights-summary li {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.weights-summary li span:first-child {
+  color: var(--text-muted);
+}
+
+.weights-summary li span:last-child {
+  color: var(--text);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}

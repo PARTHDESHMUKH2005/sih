@@ -68,6 +68,8 @@ export interface SimulationResult {
     tier: import("./types").Tier;
     priorityScore: number;
     componentScores: PrioritizationItem["componentScores"];
+    breakdown: PrioritizationItem["breakdown"];
+    weights: PrioritizationItem["weights"];
   }[];
 }
 
@@ -84,7 +86,13 @@ export async function translateStrings(texts: string[], target = "hi-IN"): Promi
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ texts, target }),
   });
-  if (!res.ok) return texts; // graceful fallback to English
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.error ?? `Translation failed: ${res.status}`);
+  }
   const data = await res.json();
-  return (data.translations as string[]) ?? texts;
+  if (!Array.isArray(data.translations) || data.translations.length !== texts.length) {
+    throw new Error("Sarvam returned an incomplete translation");
+  }
+  return data.translations as string[];
 }

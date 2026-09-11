@@ -23,6 +23,13 @@ export interface PrioritizationItem {
     disasterHistoryScore: number;
     hazardScores: Record<HazardType, number>;
   };
+  breakdown: {
+    hazard_severity: number;
+    population_exposure: number;
+    disaster_history: number;
+    vulnerability_modifier: number;
+  };
+  weights: { alpha: number; beta: number; gamma: number; delta: number };
   suggestedSites: {
     id: string;
     name: string;

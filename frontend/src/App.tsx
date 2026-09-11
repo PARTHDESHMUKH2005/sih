@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import "./App.css";
 import { getHazardZones, getHabitations, getPrioritization, getSites, getSummary, type SimulationResult } from "./api";
 import { BrandMark } from "./components/BrandMark";
+import { DetailPanel } from "./components/DetailPanel";
 import { Filters } from "./components/Filters";
 import { Legend } from "./components/Legend";
 import { LoginScreen } from "./components/LoginScreen";
@@ -13,6 +14,7 @@ import { LandingPage } from "./components/LandingPage";
 import { useI18n } from "./i18n";
 import { exportPrioritizationCsv, exportPrioritizationGeoJson } from "./lib/export";
 import type { HazardType, PrioritizationItem, Session, Summary, Tier } from "./types";
+import { getRelocationSiteById } from "./data/relocationSites";
 
 const ALL_HAZARDS_VISIBLE: Record<HazardType, boolean> = {
   landslide: true,
@@ -32,6 +34,7 @@ function App() {
   const [summary, setSummary] = useState<Summary | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [selectedSiteId, setSelectedSiteId] = useState<string | null>(null);
+  const [selectedRelocationSiteId, setSelectedRelocationSiteId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const [districtFilter, setDistrictFilter] = useState("");
@@ -59,6 +62,8 @@ function App() {
       tier: r.tier,
       priorityScore: r.priorityScore,
       componentScores: r.componentScores,
+      breakdown: r.breakdown,
+      weights: r.weights,
       suggestedSites: baseById.get(r.habitationId)?.suggestedSites ?? [],
     }));
   }, [simResults, prioritization]);
@@ -114,11 +119,19 @@ function App() {
   const handleSelect = useCallback((id: string) => {
     setSelectedId(id);
     setSelectedSiteId(null);
+    setSelectedRelocationSiteId(null);
   }, []);
 
   const handleSelectSite = useCallback((id: string) => {
     setSelectedSiteId(id);
     setSelectedId(null);
+    setSelectedRelocationSiteId(null);
+  }, []);
+
+  const handleSelectRelocationSite = useCallback((id: string) => {
+    setSelectedRelocationSiteId(id);
+    setSelectedId(null);
+    setSelectedSiteId(null);
   }, []);
 
   const handleToggleHazard = useCallback((type: HazardType) => {
@@ -141,6 +154,8 @@ function App() {
   }
 
   const selectedSiteFeature = sites?.features.find((f) => String(f.id) === selectedSiteId);
+  const selectedRelocationSite = selectedRelocationSiteId ? getRelocationSiteById(selectedRelocationSiteId) : null;
+  const selectedHabitation = displayedPrioritization.find((p) => p.habitationId === selectedId);
 
   return (
     <div className="dashboard">
@@ -213,6 +228,7 @@ function App() {
             sites={sites}
             onSelectHabitation={handleSelect}
             onSelectSite={handleSelectSite}
+            onSelectRelocationSite={handleSelectRelocationSite}
             hazardVisibility={hazardVisibility}
             hazardOpacity={hazardOpacity}
           />
@@ -240,6 +256,19 @@ function App() {
               </button>
             </div>
             <PrioritizationPanel items={displayedPrioritization} selectedId={selectedId} onSelect={handleSelect} />
+            {(selectedId || selectedRelocationSiteId) && (
+              <div className="detail-panel-overlay">
+                <DetailPanel
+                  type={selectedRelocationSiteId ? "relocation-site" : "habitation"}
+                  habitation={selectedHabitation ?? null}
+                  relocationSite={selectedRelocationSite ?? null}
+                  onClose={() => {
+                    setSelectedId(null);
+                    setSelectedRelocationSiteId(null);
+                  }}
+                />
+              </div>
+            )}
           </div>
         )}
         {!canSeeHabitationData && (

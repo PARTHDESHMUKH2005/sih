@@ -2,6 +2,7 @@ import * as maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useRef } from "react";
 import type { HazardType } from "../types";
+import { RELOCATION_SITES, getHabitationSiteLinks } from "../data/relocationSites";
 
 const HAZARD_COLORS: Record<string, string> = {
   landslide: "#a6423a",
@@ -9,6 +10,36 @@ const HAZARD_COLORS: Record<string, string> = {
   coastal_erosion: "#6b4c9a",
   cloudburst: "#2f8f5b",
 };
+
+const RELOCATION_SITE_COLORS: Record<string, string> = {
+  "Suitable": "#22c55e",
+  "Conditional — needs investment": "#f59e0b",
+  "Not suitable": "#ef4444",
+};
+
+function createRelocationSiteGeoJSON(): GeoJSON.FeatureCollection {
+  return {
+    type: "FeatureCollection",
+    features: RELOCATION_SITES.map((site) => ({
+      type: "Feature",
+      id: site.id,
+      properties: { id: site.id, name: site.name, status: site.status, suitabilityScore: site.suitabilityScore },
+      geometry: { type: "Point", coordinates: [site.longitude, site.latitude] },
+    })),
+  };
+}
+
+function createSiteLinkGeoJSON(): GeoJSON.FeatureCollection {
+  return {
+    type: "FeatureCollection",
+    features: getHabitationSiteLinks().map((link, idx) => ({
+      type: "Feature",
+      id: `link-${idx}`,
+      properties: { from: link.from, to: link.to },
+      geometry: { type: "LineString", coordinates: [link.fromCoords, link.toCoords] },
+    })),
+  };
+}
 
 /** Bounding box of every coordinate in a FeatureCollection, or null if empty. */
 function boundsOf(fc: GeoJSON.FeatureCollection): maplibregl.LngLatBoundsLike | null {
@@ -33,6 +64,7 @@ interface MapViewProps {
   sites: GeoJSON.FeatureCollection | null;
   onSelectHabitation: (id: string) => void;
   onSelectSite?: (id: string) => void;
+  onSelectRelocationSite?: (id: string) => void;
   hazardVisibility?: Record<HazardType, boolean>;
   hazardOpacity?: number;
 }
@@ -43,6 +75,7 @@ export function MapView({
   sites,
   onSelectHabitation,
   onSelectSite,
+  onSelectRelocationSite,
   hazardVisibility,
   hazardOpacity = 0.45,
 }: MapViewProps) {
@@ -222,6 +255,53 @@ export function MapView({
     if (map.isStyleLoaded()) apply();
     else map.once("load", apply);
   }, [habitations, onSelectHabitation]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+    const data = createRelocationSiteGeoJSON();
+    const apply = () => {
+      if (!map.getSource("relocation-sites")) {
+        map.addSource("relocation-sites", { type: "geojson", data });
+        map.addLayer({
+          id: "relocation-sites-points",
+          type: "circle",
+          source: "relocation-sites",
+          paint: {
+            "circle-radius": 8,
+            "circle-color": ["match", ["get", "status"], "Suitable", RELOCATION_SITE_COLORS.Suitable, "Conditional — needs investment", RELOCATION_SITE_COLORS["Conditional — needs investment"], "Not suitable", RELOCATION_SITE_COLORS["Not suitable"], "#999999"],
+            "circle-stroke-color": "#fff",
+            "circle-stroke-width": 2,
+          },
+        });
+        map.on("click", "relocation-sites-points", (e: maplibregl.MapLayerMouseEvent) => {
+          const id = e.features?.[0]?.properties?.id;
+          if (id) onSelectRelocationSite?.(String(id));
+        });
+        map.on("mouseenter", "relocation-sites-points", () => { map.getCanvas().style.cursor = "pointer"; });
+        map.on("mouseleave", "relocation-sites-points", () => { map.getCanvas().style.cursor = ""; });
+      }
+    };
+    if (map.isStyleLoaded()) apply(); else map.once("load", apply);
+  }, [onSelectRelocationSite]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+    const data = createSiteLinkGeoJSON();
+    const apply = () => {
+      if (map.getSource("site-links")) return;
+      map.addSource("site-links", { type: "geojson", data });
+      map.addLayer({
+        id: "site-links-line",
+        type: "line",
+        source: "site-links",
+        layout: { "line-cap": "round", "line-join": "round" },
+        paint: { "line-color": "#4ade80", "line-width": 2, "line-dasharray": [8, 4], "line-opacity": 0.7 },
+      });
+    };
+    if (map.isStyleLoaded()) apply(); else map.once("load", apply);
+  }, []);
 
   return (
     <div className="map-container-shell">

@@ -2,8 +2,8 @@ import { Router } from "express";
 
 // Server-side proxy to Sarvam AI translation so the API key never reaches the
 // browser. Results are cached in-memory per (text, target) so repeated UI
-// toggles don't re-hit the API. Falls back to the original English text on any
-// error, so a translation outage never breaks the dashboard.
+// toggles don't re-hit the API. Translation errors are surfaced to the client;
+// silently returning English makes a Hindi toggle look successful when it is not.
 
 export const translateRouter = Router();
 
@@ -16,33 +16,35 @@ async function translateOne(text: string, target: string): Promise<string> {
   if (cached !== undefined) return cached;
 
   const apiKey = process.env.SARVAM_API_KEY;
-  if (!apiKey) return text;
+  if (!apiKey) throw new Error("SARVAM_API_KEY is not configured");
 
-  try {
-    const resp = await fetch(SARVAM_URL, {
-      method: "POST",
-      headers: { "api-subscription-key": apiKey, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        input: text,
-        source_language_code: "en-IN",
-        target_language_code: target,
-      }),
-    });
-    if (!resp.ok) return text;
-    const data = (await resp.json()) as { translated_text?: string };
-    const out = data.translated_text ?? text;
-    cache.set(key, out);
-    return out;
-  } catch {
-    return text;
+  const resp = await fetch(SARVAM_URL, {
+    method: "POST",
+    headers: { "api-subscription-key": apiKey, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      input: text,
+      source_language_code: "en-IN",
+      target_language_code: target,
+    }),
+  });
+  if (!resp.ok) {
+    const detail = await resp.text().catch(() => "");
+    throw new Error(`Sarvam returned ${resp.status}${detail ? `: ${detail.slice(0, 200)}` : ""}`);
   }
+  const data = (await resp.json()) as { translated_text?: string };
+  if (typeof data.translated_text !== "string" || !data.translated_text.trim()) {
+    throw new Error("Sarvam returned no translated_text");
+  }
+  const out = data.translated_text;
+  cache.set(key, out);
+  return out;
 }
 
 /**
  * @openapi
  * /translate:
  *   post:
- *     summary: Translate an array of UI strings (via Sarvam AI); English fallback on error
+ *     summary: Translate an array of UI strings via Sarvam AI
  *     tags: [Translate]
  *     requestBody:
  *       content:
@@ -65,6 +67,16 @@ translateRouter.post("/", async (req, res) => {
     return res.status(400).json({ error: "too many strings in one request (max 200)" });
   }
 
-  const translations = await Promise.all(texts.map((t: string) => translateOne(t, String(target))));
-  res.json({ translations });
+  if (typeof target !== "string" || !/^[a-z]{2}-[A-Z]{2}$/.test(target)) {
+    return res.status(400).json({ error: "target must be a language code such as hi-IN" });
+  }
+
+  try {
+    const translations = await Promise.all(texts.map((t: string) => translateOne(t, target)));
+    res.json({ translations });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Translation failed";
+    const status = message.includes("not configured") ? 503 : 502;
+    res.status(status).json({ error: message });
+  }
 });

@@ -8,7 +8,7 @@ import { parsePagination } from "../gis.js";
 import { authenticate, requireRole, resolveStateScope } from "../middleware/auth.js";
 import { computeHazardSeverity, loadAhpWeights } from "../scoring/ahp.js";
 import { computeExposureScore, computeVulnerabilityScore } from "../scoring/exposure.js";
-import { computeDisasterHistoryScore, computePriorityScore, deriveTier } from "../scoring/prioritization.js";
+import { computeDisasterHistoryScore, computePriorityScore, deriveTier, PRIORITY_WEIGHTS } from "../scoring/prioritization.js";
 import type { HazardType, Tier } from "../types.js";
 
 const VALID_TIERS: Tier[] = ["immediate", "short_term", "medium_term"];
@@ -48,8 +48,17 @@ interface PrioritizationRow {
   population: number;
   tier: Tier;
   priorityScore: number;
-  componentScores: unknown;
+  componentScores: {
+    hazardScores: Record<HazardType, number>;
+    exposureScore: number;
+    disasterHistoryScore: number;
+  };
   suggestedSiteIds: string[];
+}
+
+interface ExposureRow {
+  habitationId: string;
+  vulnerabilityScore: number;
 }
 
 /**
@@ -90,6 +99,14 @@ prioritizationRouter.get("/", async (req, res) => {
     LIMIT ${limit} OFFSET ${offset}
   `;
 
+  const habitationIds = rows.map((r) => r.habitationId);
+  const exposureRows = habitationIds.length
+    ? await prisma.$queryRaw<ExposureRow[]>`
+        SELECT "habitationId", "vulnerabilityScore" FROM habitation_exposure WHERE "habitationId" IN (${Prisma.join(habitationIds)})
+      `
+    : [];
+  const vulnerabilityById = new Map(exposureRows.map((e) => [e.habitationId, e.vulnerabilityScore]));
+
   const siteIds = [...new Set(rows.flatMap((r) => r.suggestedSiteIds))];
   const sites = siteIds.length
     ? await prisma.$queryRaw<{ id: string; name: string; suitabilityScore: number; capacityPersons: number }[]>`
@@ -98,8 +115,10 @@ prioritizationRouter.get("/", async (req, res) => {
     : [];
   const siteById = new Map(sites.map((s) => [s.id, s]));
 
-  res.json(
-    rows.map((r) => ({
+  const weights = { alpha: PRIORITY_WEIGHTS.hazardSeverity, beta: PRIORITY_WEIGHTS.exposure, gamma: PRIORITY_WEIGHTS.disasterHistory, delta: 0 };
+  res.json(rows.map((r) => {
+    const hazardSeverity = Math.max(...Object.values(r.componentScores.hazardScores));
+    return {
       habitationId: r.habitationId,
       name: r.name,
       state: r.stateCode,
@@ -108,9 +127,16 @@ prioritizationRouter.get("/", async (req, res) => {
       tier: r.tier,
       priorityScore: r.priorityScore,
       componentScores: r.componentScores,
+      breakdown: {
+        hazard_severity: hazardSeverity,
+        population_exposure: r.componentScores.exposureScore,
+        disaster_history: r.componentScores.disasterHistoryScore,
+        vulnerability_modifier: vulnerabilityById.get(r.habitationId) ?? 0,
+      },
+      weights,
       suggestedSites: r.suggestedSiteIds.map((id) => siteById.get(id)).filter(Boolean),
-    })),
-  );
+    };
+  }));
 });
 
 /**
@@ -201,6 +227,13 @@ prioritizationRouter.get("/simulate", async (req, res) => {
       tier,
       priorityScore,
       componentScores: { hazardScores, exposureScore, disasterHistoryScore },
+      breakdown: {
+        hazard_severity: hazardSeverity,
+        population_exposure: exposureScore,
+        disaster_history: disasterHistoryScore,
+        vulnerability_modifier: vulnerabilityScore,
+      },
+      weights: { alpha: PRIORITY_WEIGHTS.hazardSeverity, beta: PRIORITY_WEIGHTS.exposure, gamma: PRIORITY_WEIGHTS.disasterHistory, delta: 0 },
     };
   });
 
