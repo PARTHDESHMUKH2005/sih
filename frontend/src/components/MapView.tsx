@@ -223,5 +223,19 @@ export function MapView({
     else map.once("load", apply);
   }, [habitations, onSelectHabitation]);
 
-  return <div ref={containerRef} className="map-container" />;
+  return (
+    <div className="map-container-shell">
+      <div ref={containerRef} className="map-container" />
+      {!hazardZones && (
+        <div className="map-loading" role="status" aria-live="polite">
+          <div className="map-loading-card">
+            <span className="loading-kicker">BHOOMI SURAKSHA</span>
+            <strong>Loading operational map</strong>
+            <span className="loading-line skeleton" />
+            <span className="loading-line short skeleton" />
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }

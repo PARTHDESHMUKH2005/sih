@@ -9,6 +9,7 @@ import { MapView } from "./components/MapView";
 import { PrioritizationPanel } from "./components/PrioritizationPanel";
 import { SiteDetail, type SiteFeatureProperties } from "./components/SiteDetail";
 import { WhatIfSlider } from "./components/WhatIfSlider";
+import { LandingPage } from "./components/LandingPage";
 import { useI18n } from "./i18n";
 import { exportPrioritizationCsv, exportPrioritizationGeoJson } from "./lib/export";
 import type { HazardType, PrioritizationItem, Session, Summary, Tier } from "./types";
@@ -39,6 +40,9 @@ function App() {
   const [hazardOpacity, setHazardOpacity] = useState(0.45);
 
   const canSeeHabitationData = session?.role === "admin" || session?.role === "state_official";
+
+  // ── View state: 'landing' → 'login' → 'dashboard' ─────────────────
+  const [view, setView] = useState<"landing" | "login" | "dashboard">("landing");
 
   // What-if simulation overlay: when active, override each habitation's tier/score
   // with the simulated values (keeping the baseline suggested sites and geometry).
@@ -71,6 +75,10 @@ function App() {
       }),
     };
   }, [simResults, habitations]);
+
+  useEffect(() => {
+    if (view === "dashboard" && !session) setView("login");
+  }, [session, view]);
 
   useEffect(() => {
     if (!session) return;
@@ -116,6 +124,17 @@ function App() {
   const handleToggleHazard = useCallback((type: HazardType) => {
     setHazardVisibility((prev) => ({ ...prev, [type]: !prev[type] }));
   }, []);
+
+  const goToLogin = useCallback(() => setView("login"), []);
+  const goToDashboard = useCallback(() => setView("dashboard"), []);
+
+  if (view === "landing") {
+    return <LandingPage onSignIn={goToLogin} />;
+  }
+
+  if (view === "login") {
+    return <LoginScreen onLogin={session => { setSession(session); goToDashboard(); }} />;
+  }
 
   if (!session) {
     return <LoginScreen onLogin={setSession} />;

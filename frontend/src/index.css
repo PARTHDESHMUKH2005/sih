@@ -1,14 +1,14 @@
 :root {
   color-scheme: light;
 
-  /* Earth-toned palette (Bhoomi = "land/earth") instead of generic SaaS blue */
+  /* Restrained institutional palette — earth-toned, desaturated, authoritative */
   --brand-900: #0e2926;
   --brand-800: #143a35;
   --brand-700: #1c5049;
   --brand-500: #1f7a6c;
   --brand-400: #2f9c8a;
   --accent: #c2703d;
-  --accent-dark: #a85a2c;
+  --accent-muted: #9a582f;
 
   --bg: #f6f4ee;
   --surface: #ffffff;
@@ -20,9 +20,10 @@
   --text-muted: #5c6560;
   --text-faint: #8a9089;
 
-  --tier-immediate: #b3261e;
-  --tier-short: #c26a1d;
-  --tier-medium: #a3821a;
+  /* Desaturated tier colors — institutional, not neon */
+  --tier-immediate: #a83028;
+  --tier-short: #b84734;
+  --tier-medium: #a86e2e;
 
   --hazard-landslide: #a6423a;
   --hazard-flood: #2a5f9e;
@@ -36,6 +37,10 @@
   --shadow-sm: 0 1px 2px rgba(14, 41, 38, 0.08);
   --shadow-md: 0 4px 16px rgba(14, 41, 38, 0.12);
   --shadow-lg: 0 12px 36px rgba(14, 41, 38, 0.22);
+
+  /* Skeleton animation */
+  --skeleton-base: var(--surface);
+  --skeleton-shade: rgba(0, 0, 0, 0.08);
 }
 
 * {
@@ -56,3 +61,42 @@ body {
   font-family: "Inter", system-ui, "Segoe UI", Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
+
+/* ── Skeleton loaders ─────────────────────────────────────── */
+
+.skeleton {
+  background: var(--skeleton-base);
+  background: linear-gradient(90deg, var(--skeleton-base) 25%, var(--skeleton-shade) 35%, var(--skeleton-base) 65%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite ease-in-out;
+}
+
+@keyframes skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton-text {
+  animation: skeleton-loading-text 1.5s infinite ease-in-out;
+}
+
+@keyframes skeleton-loading-text {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton-row {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.skeleton-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 4px;
+  flex-shrink: 0;
+}
+
+.skeleton-dot:last-child { margin-right: 0; }

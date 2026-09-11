@@ -14,7 +14,19 @@ import { translateRouter } from "./routes/translate.js";
 
 export const app = express();
 
-app.use(cors({ origin: process.env.CORS_ORIGIN ?? "http://localhost:5173" }));
+const defaultOrigins = new Set([
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
+]);
+
+const configuredOrigins = process.env.CORS_ORIGIN?.split(",").map((origin) => origin.trim()).filter(Boolean);
+const allowedOrigins = configuredOrigins ?? [...defaultOrigins];
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+  }),
+);
 app.use(express.json());
 
 app.get("/api/health", (_req, res) => res.json({ status: "ok" }));
