@@ -49,13 +49,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 82,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 92.8,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 84.7
       },
-      "_source": "CWC flood-forecast station 'Roorkee' on Solani (Ganga)"
+      "_source": "CWC flood-forecast station 'Roorkee' on Solani (Ganga)",
+      "_physical": {
+        "elevation_meters": 279.3,
+        "slope_degrees": 3.4
+      }
     },
     {
       "id": "uk-flood-002",
@@ -106,13 +111,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 85,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 88.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 30.8,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 85.2
       },
-      "_source": "CWC flood-forecast station 'Kuthnaur' on Yamuna (Ganga)"
+      "_source": "CWC flood-forecast station 'Kuthnaur' on Yamuna (Ganga)",
+      "_physical": {
+        "elevation_meters": 2470.3,
+        "slope_degrees": 3.05
+      }
     },
     {
       "id": "uk-flood-003",
@@ -163,13 +173,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 85,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 88.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 73.5,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 86.4
       },
-      "_source": "CWC flood-forecast station 'Jauljibi' on Gauri Ganga (Ganga)"
+      "_source": "CWC flood-forecast station 'Jauljibi' on Gauri Ganga (Ganga)",
+      "_physical": {
+        "elevation_meters": 961.3,
+        "slope_degrees": 2.29
+      }
     },
     {
       "id": "uk-flood-004",
@@ -220,13 +235,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 82,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 72.5,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 83.5
       },
-      "_source": "CWC flood-forecast station 'Sitarganj' on Deoha (Ganga)"
+      "_source": "CWC flood-forecast station 'Sitarganj' on Deoha (Ganga)",
+      "_physical": {
+        "elevation_meters": 996.9,
+        "slope_degrees": 4.15
+      }
     },
     {
       "id": "uk-flood-005",
@@ -277,13 +297,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 82,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 88.5,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 82.7
       },
-      "_source": "CWC flood-forecast station 'Dosni' on Solani (Ganga)"
+      "_source": "CWC flood-forecast station 'Dosni' on Solani (Ganga)",
+      "_physical": {
+        "elevation_meters": 431.0,
+        "slope_degrees": 4.67
+      }
     },
     {
       "id": "uk-flood-006",
@@ -334,13 +359,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 85,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 88.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 40.1,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 83.5
       },
-      "_source": "CWC flood-forecast station 'Gaurikund' on Mandakini (Ganga)"
+      "_source": "CWC flood-forecast station 'Gaurikund' on Mandakini (Ganga)",
+      "_physical": {
+        "elevation_meters": 2141.9,
+        "slope_degrees": 4.11
+      }
     },
     {
       "id": "uk-flood-007",
@@ -391,13 +421,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 82,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 30.0,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 80.6
       },
-      "_source": "CWC flood-forecast station 'Tuini (Tons)' on Tons (Ganga)"
+      "_source": "CWC flood-forecast station 'Tuini (Tons)' on Tons (Ganga)",
+      "_physical": {
+        "elevation_meters": 2712.9,
+        "slope_degrees": 5.99
+      }
     },
     {
       "id": "uk-flood-008",
@@ -448,13 +483,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 95,
-        "elevation": 62,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 66.1,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 84.4
       },
-      "_source": "CWC flood-forecast station 'Srinagar' on Alaknanda (Ganga)"
+      "_source": "CWC flood-forecast station 'Srinagar' on Alaknanda (Ganga)",
+      "_physical": {
+        "elevation_meters": 1224.1,
+        "slope_degrees": 3.58
+      }
     },
     {
       "id": "uk-flood-009",
@@ -505,13 +545,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 85,
-        "distance_to_drainage": 95,
-        "elevation": 62,
+        "rainfall_intensity": 88.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 49.2,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 85.0
       },
-      "_source": "CWC flood-forecast station 'Ganganagar' on Mandakini (Ganga)"
+      "_source": "CWC flood-forecast station 'Ganganagar' on Mandakini (Ganga)",
+      "_physical": {
+        "elevation_meters": 1821.2,
+        "slope_degrees": 3.19
+      }
     },
     {
       "id": "uk-flood-010",
@@ -562,13 +607,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 85,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 88.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 30.0,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 85.7
       },
-      "_source": "CWC flood-forecast station 'Badrinath' on Alaknanda (Ganga)"
+      "_source": "CWC flood-forecast station 'Badrinath' on Alaknanda (Ganga)",
+      "_physical": {
+        "elevation_meters": 2798.9,
+        "slope_degrees": 2.74
+      }
     },
     {
       "id": "uk-flood-011",
@@ -619,13 +669,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 85,
-        "distance_to_drainage": 82,
-        "elevation": 55,
+        "rainfall_intensity": 88.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 80.3,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 88.1
       },
-      "_source": "CWC flood-forecast station 'RAMESHWAR' on Sarju (Ganga)"
+      "_source": "CWC flood-forecast station 'RAMESHWAR' on Sarju (Ganga)",
+      "_physical": {
+        "elevation_meters": 718.7,
+        "slope_degrees": 1.23
+      }
     },
     {
       "id": "uk-flood-012",
@@ -676,13 +731,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 82,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 71.6,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 88.0
       },
-      "_source": "CWC flood-forecast station 'Satyanarayan' on Song (Ganga)"
+      "_source": "CWC flood-forecast station 'Satyanarayan' on Song (Ganga)",
+      "_physical": {
+        "elevation_meters": 1029.0,
+        "slope_degrees": 1.3
+      }
     },
     {
       "id": "uk-flood-013",
@@ -733,13 +793,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 85,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 88.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 37.5,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 83.7
       },
-      "_source": "CWC flood-forecast station 'Suraithota' on Alaknanda (Ganga)"
+      "_source": "CWC flood-forecast station 'Suraithota' on Alaknanda (Ganga)",
+      "_physical": {
+        "elevation_meters": 2235.2,
+        "slope_degrees": 4.03
+      }
     },
     {
       "id": "uk-flood-014",
@@ -790,13 +855,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 85.8,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 86.6
       },
-      "_source": "CWC flood-forecast station 'Suyalbari' on Kosi (Ganga)"
+      "_source": "CWC flood-forecast station 'Suyalbari' on Kosi (Ganga)",
+      "_physical": {
+        "elevation_meters": 525.6,
+        "slope_degrees": 2.16
+      }
     },
     {
       "id": "uk-flood-015",
@@ -847,13 +917,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 51.1,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 81.1
       },
-      "_source": "CWC flood-forecast station 'Chamiyala' on Balganga (Ganga)"
+      "_source": "CWC flood-forecast station 'Chamiyala' on Balganga (Ganga)",
+      "_physical": {
+        "elevation_meters": 1753.8,
+        "slope_degrees": 5.66
+      }
     },
     {
       "id": "uk-flood-016",
@@ -904,13 +979,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 85,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 88.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 50.6,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 84.3
       },
-      "_source": "CWC flood-forecast station 'Birahi' on Alaknanda (Ganga)"
+      "_source": "CWC flood-forecast station 'Birahi' on Alaknanda (Ganga)",
+      "_physical": {
+        "elevation_meters": 1772.0,
+        "slope_degrees": 3.65
+      }
     },
     {
       "id": "uk-flood-017",
@@ -961,13 +1041,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 65.4,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 86.3
       },
-      "_source": "CWC flood-forecast station 'Bageshwar' on Saryu (Ganga)"
+      "_source": "CWC flood-forecast station 'Bageshwar' on Saryu (Ganga)",
+      "_physical": {
+        "elevation_meters": 1247.3,
+        "slope_degrees": 2.38
+      }
     },
     {
       "id": "uk-flood-018",
@@ -1018,13 +1103,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 82,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 87.2,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 88.2
       },
-      "_source": "CWC flood-forecast station 'Fica Barrage D/S' on Fica (Ganga)"
+      "_source": "CWC flood-forecast station 'Fica Barrage D/S' on Fica (Ganga)",
+      "_physical": {
+        "elevation_meters": 474.7,
+        "slope_degrees": 1.13
+      }
     },
     {
       "id": "uk-flood-019",
@@ -1075,13 +1165,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 82,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 58.3,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 85.5
       },
-      "_source": "CWC flood-forecast station 'Sabhawala' on Aasan (Ganga)"
+      "_source": "CWC flood-forecast station 'Sabhawala' on Aasan (Ganga)",
+      "_physical": {
+        "elevation_meters": 1498.2,
+        "slope_degrees": 2.85
+      }
     },
     {
       "id": "uk-flood-020",
@@ -1132,13 +1227,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 82,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 68.0,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 82.1
       },
-      "_source": "CWC flood-forecast station 'Gagrigol' on Gomati (Ganga)"
+      "_source": "CWC flood-forecast station 'Gagrigol' on Gomati (Ganga)",
+      "_physical": {
+        "elevation_meters": 1155.5,
+        "slope_degrees": 5.02
+      }
     },
     {
       "id": "uk-flood-021",
@@ -1189,13 +1289,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 76.5,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 83.9
       },
-      "_source": "CWC flood-forecast station 'Pancheshwar' on Sarda (Ganga)"
+      "_source": "CWC flood-forecast station 'Pancheshwar' on Sarda (Ganga)",
+      "_physical": {
+        "elevation_meters": 852.9,
+        "slope_degrees": 3.87
+      }
     },
     {
       "id": "uk-flood-022",
@@ -1246,13 +1351,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 81.9,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 82.0
       },
-      "_source": "CWC flood-forecast station 'Ramnagar Barrage D/S' on Kosi (Ganga)"
+      "_source": "CWC flood-forecast station 'Ramnagar Barrage D/S' on Kosi (Ganga)",
+      "_physical": {
+        "elevation_meters": 663.1,
+        "slope_degrees": 5.11
+      }
     },
     {
       "id": "uk-flood-023",
@@ -1303,13 +1413,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 70.0,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 82.1
       },
-      "_source": "CWC flood-forecast station 'Devprayag (A)' on Alaknanda (Ganga)"
+      "_source": "CWC flood-forecast station 'Devprayag (A)' on Alaknanda (Ganga)",
+      "_physical": {
+        "elevation_meters": 1086.2,
+        "slope_degrees": 5.02
+      }
     },
     {
       "id": "uk-flood-024",
@@ -1360,13 +1475,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 85,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 88.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 65.6,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 85.2
       },
-      "_source": "CWC flood-forecast station 'Nandkeshri' on Pinder (Ganga)"
+      "_source": "CWC flood-forecast station 'Nandkeshri' on Pinder (Ganga)",
+      "_physical": {
+        "elevation_meters": 1239.8,
+        "slope_degrees": 3.04
+      }
     },
     {
       "id": "uk-flood-025",
@@ -1417,13 +1537,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 85,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 88.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 45.2,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 84.1
       },
-      "_source": "CWC flood-forecast station 'Dharasu' on Bhagirathi (Ganga)"
+      "_source": "CWC flood-forecast station 'Dharasu' on Bhagirathi (Ganga)",
+      "_physical": {
+        "elevation_meters": 1962.7,
+        "slope_degrees": 3.79
+      }
     },
     {
       "id": "uk-flood-026",
@@ -1474,13 +1599,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 82,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 45.9,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 84.2
       },
-      "_source": "CWC flood-forecast station 'Dhopaddhaar' on Bhilangane (Ganga)"
+      "_source": "CWC flood-forecast station 'Dhopaddhaar' on Bhilangane (Ganga)",
+      "_physical": {
+        "elevation_meters": 1938.7,
+        "slope_degrees": 3.71
+      }
     },
     {
       "id": "uk-flood-027",
@@ -1531,13 +1661,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 71.5,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 81.7
       },
-      "_source": "CWC flood-forecast station 'Devprayag (G)' on Ganga (Ganga)"
+      "_source": "CWC flood-forecast station 'Devprayag (G)' on Ganga (Ganga)",
+      "_physical": {
+        "elevation_meters": 1032.8,
+        "slope_degrees": 5.3
+      }
     },
     {
       "id": "uk-flood-028",
@@ -1588,13 +1723,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 82,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 41.0,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 83.4
       },
-      "_source": "CWC flood-forecast station 'Attal' on - (Ganga)"
+      "_source": "CWC flood-forecast station 'Attal' on - (Ganga)",
+      "_physical": {
+        "elevation_meters": 2112.4,
+        "slope_degrees": 4.19
+      }
     },
     {
       "id": "uk-flood-029",
@@ -1645,13 +1785,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 85,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 88.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 30.0,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 85.1
       },
-      "_source": "CWC flood-forecast station 'Gangotri' on Bhagirathi (Ganga)"
+      "_source": "CWC flood-forecast station 'Gangotri' on Bhagirathi (Ganga)",
+      "_physical": {
+        "elevation_meters": 3176.1,
+        "slope_degrees": 3.14
+      }
     },
     {
       "id": "uk-flood-030",
@@ -1702,13 +1847,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 85,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 88.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 74.5,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 82.6
       },
-      "_source": "CWC flood-forecast station 'GHAT' on Saryu (Ganga)"
+      "_source": "CWC flood-forecast station 'GHAT' on Saryu (Ganga)",
+      "_physical": {
+        "elevation_meters": 926.1,
+        "slope_degrees": 4.72
+      }
     },
     {
       "id": "uk-flood-031",
@@ -1759,13 +1909,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 85,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 88.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 61.2,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 85.8
       },
-      "_source": "CWC flood-forecast station 'Rudraprayag (M)' on Mandakini (Ganga)"
+      "_source": "CWC flood-forecast station 'Rudraprayag (M)' on Mandakini (Ganga)",
+      "_physical": {
+        "elevation_meters": 1394.5,
+        "slope_degrees": 2.67
+      }
     },
     {
       "id": "uk-flood-032",
@@ -1816,13 +1971,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 83.4,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 82.2
       },
-      "_source": "CWC flood-forecast station 'Kalagarh' on Ramganga (Ganga)"
+      "_source": "CWC flood-forecast station 'Kalagarh' on Ramganga (Ganga)",
+      "_physical": {
+        "elevation_meters": 610.0,
+        "slope_degrees": 4.94
+      }
     },
     {
       "id": "uk-flood-033",
@@ -1873,13 +2033,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 82,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 30.0,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 84.3
       },
-      "_source": "CWC flood-forecast station 'Tuini (Pabar)' on Pabar (Ganga)"
+      "_source": "CWC flood-forecast station 'Tuini (Pabar)' on Pabar (Ganga)",
+      "_physical": {
+        "elevation_meters": 2800.5,
+        "slope_degrees": 3.64
+      }
     },
     {
       "id": "uk-flood-034",
@@ -1930,13 +2095,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 70.8,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 83.0
       },
-      "_source": "CWC flood-forecast station 'RUPALIGAD' on Mahakali/Sarda (Ganga)"
+      "_source": "CWC flood-forecast station 'RUPALIGAD' on Mahakali/Sarda (Ganga)",
+      "_physical": {
+        "elevation_meters": 1055.3,
+        "slope_degrees": 4.48
+      }
     },
     {
       "id": "uk-flood-035",
@@ -1987,13 +2157,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 85,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 88.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 30.0,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 80.2
       },
-      "_source": "CWC flood-forecast station 'Harshil' on Bhagirathi (Ganga)"
+      "_source": "CWC flood-forecast station 'Harshil' on Bhagirathi (Ganga)",
+      "_physical": {
+        "elevation_meters": 3143.9,
+        "slope_degrees": 6.21
+      }
     },
     {
       "id": "uk-flood-036",
@@ -2044,13 +2219,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 84.9,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 84.3
       },
-      "_source": "CWC flood-forecast station 'Raysi' on Banganga (Ganga)"
+      "_source": "CWC flood-forecast station 'Raysi' on Banganga (Ganga)",
+      "_physical": {
+        "elevation_meters": 556.5,
+        "slope_degrees": 3.61
+      }
     },
     {
       "id": "uk-flood-037",
@@ -2101,13 +2281,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 85,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 88.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 59.7,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 84.4
       },
-      "_source": "CWC flood-forecast station 'Nandprayag' on Alaknanda (Ganga)"
+      "_source": "CWC flood-forecast station 'Nandprayag' on Alaknanda (Ganga)",
+      "_physical": {
+        "elevation_meters": 1450.4,
+        "slope_degrees": 3.55
+      }
     },
     {
       "id": "uk-flood-038",
@@ -2158,13 +2343,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 59.5,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 85.8
       },
-      "_source": "CWC flood-forecast station 'Koteshwar' on Bhagirathi (Ganga)"
+      "_source": "CWC flood-forecast station 'Koteshwar' on Bhagirathi (Ganga)",
+      "_physical": {
+        "elevation_meters": 1456.6,
+        "slope_degrees": 2.69
+      }
     },
     {
       "id": "uk-flood-039",
@@ -2215,13 +2405,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 57.0,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 86.5
       },
-      "_source": "CWC flood-forecast station 'Juddo Dam' on Yamuna (Yamuna Basin)"
+      "_source": "CWC flood-forecast station 'Juddo Dam' on Yamuna (Yamuna Basin)",
+      "_physical": {
+        "elevation_meters": 1546.0,
+        "slope_degrees": 2.22
+      }
     },
     {
       "id": "uk-flood-040",
@@ -2272,13 +2467,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 82,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 55.5,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 86.2
       },
-      "_source": "CWC flood-forecast station 'Aglarpul' on Aglar (Ganga)"
+      "_source": "CWC flood-forecast station 'Aglarpul' on Aglar (Ganga)",
+      "_physical": {
+        "elevation_meters": 1598.6,
+        "slope_degrees": 2.41
+      }
     },
     {
       "id": "uk-flood-041",
@@ -2329,13 +2529,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 95,
-        "elevation": 62,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 85.5,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 83.9
       },
-      "_source": "CWC flood-forecast station 'Haridwar' on Ganga (Ganga)"
+      "_source": "CWC flood-forecast station 'Haridwar' on Ganga (Ganga)",
+      "_physical": {
+        "elevation_meters": 536.2,
+        "slope_degrees": 3.87
+      }
     },
     {
       "id": "uk-flood-042",
@@ -2386,13 +2591,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 85,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 88.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 64.9,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 83.9
       },
-      "_source": "CWC flood-forecast station 'Thal' on Ram Ganga (Ganga)"
+      "_source": "CWC flood-forecast station 'Thal' on Ram Ganga (Ganga)",
+      "_physical": {
+        "elevation_meters": 1263.8,
+        "slope_degrees": 3.86
+      }
     },
     {
       "id": "uk-flood-043",
@@ -2443,13 +2653,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 55.9,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 82.9
       },
-      "_source": "CWC flood-forecast station 'Tehri Dam' on Bhagirathi (Ganga)"
+      "_source": "CWC flood-forecast station 'Tehri Dam' on Bhagirathi (Ganga)",
+      "_physical": {
+        "elevation_meters": 1583.1,
+        "slope_degrees": 4.49
+      }
     },
     {
       "id": "uk-flood-044",
@@ -2500,13 +2715,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 82,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 81.4,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 82.7
       },
-      "_source": "CWC flood-forecast station 'NAUKUCHIATAL' on Bhakhra (Ganga)"
+      "_source": "CWC flood-forecast station 'NAUKUCHIATAL' on Bhakhra (Ganga)",
+      "_physical": {
+        "elevation_meters": 679.6,
+        "slope_degrees": 4.67
+      }
     },
     {
       "id": "uk-flood-045",
@@ -2557,13 +2777,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 85,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 88.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 46.2,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 85.2
       },
-      "_source": "CWC flood-forecast station 'Joshimath' on Alaknanda (Ganga)"
+      "_source": "CWC flood-forecast station 'Joshimath' on Alaknanda (Ganga)",
+      "_physical": {
+        "elevation_meters": 1925.5,
+        "slope_degrees": 3.02
+      }
     },
     {
       "id": "uk-flood-046",
@@ -2614,13 +2839,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 82.7,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 85.0
       },
-      "_source": "CWC flood-forecast station 'Garjia' on Kosi (Ganga)"
+      "_source": "CWC flood-forecast station 'Garjia' on Kosi (Ganga)",
+      "_physical": {
+        "elevation_meters": 634.6,
+        "slope_degrees": 3.19
+      }
     },
     {
       "id": "uk-flood-047",
@@ -2671,13 +2901,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 85,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 88.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 52.6,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 82.0
       },
-      "_source": "CWC flood-forecast station 'Kanjyoti' on Dhauliganga (Ganga)"
+      "_source": "CWC flood-forecast station 'Kanjyoti' on Dhauliganga (Ganga)",
+      "_physical": {
+        "elevation_meters": 1701.2,
+        "slope_degrees": 5.12
+      }
     },
     {
       "id": "uk-flood-048",
@@ -2728,13 +2963,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 88.3,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 84.1
       },
-      "_source": "CWC flood-forecast station 'Kalagarh Dam' on Ramganga (Ganga)"
+      "_source": "CWC flood-forecast station 'Kalagarh Dam' on Ramganga (Ganga)",
+      "_physical": {
+        "elevation_meters": 437.2,
+        "slope_degrees": 3.74
+      }
     },
     {
       "id": "uk-flood-049",
@@ -2785,13 +3025,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 82,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 55.1,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 84.3
       },
-      "_source": "CWC flood-forecast station 'Haripur' on Tons (South) (Ganga)"
+      "_source": "CWC flood-forecast station 'Haripur' on Tons (South) (Ganga)",
+      "_physical": {
+        "elevation_meters": 1612.1,
+        "slope_degrees": 3.65
+      }
     },
     {
       "id": "uk-flood-050",
@@ -2842,13 +3087,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 85,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 88.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 59.0,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 85.5
       },
-      "_source": "CWC flood-forecast station 'Rudraprayag (C)' on Alaknanda (Ganga)"
+      "_source": "CWC flood-forecast station 'Rudraprayag (C)' on Alaknanda (Ganga)",
+      "_physical": {
+        "elevation_meters": 1472.9,
+        "slope_degrees": 2.87
+      }
     },
     {
       "id": "uk-flood-051",
@@ -2899,13 +3149,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 85,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 88.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 30.0,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 85.2
       },
-      "_source": "CWC flood-forecast station 'Gangnani' on Bhagirathi (Ganga)"
+      "_source": "CWC flood-forecast station 'Gangnani' on Bhagirathi (Ganga)",
+      "_physical": {
+        "elevation_meters": 2625.2,
+        "slope_degrees": 3.04
+      }
     },
     {
       "id": "uk-flood-052",
@@ -2956,13 +3211,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 85,
-        "distance_to_drainage": 82,
-        "elevation": 55,
+        "rainfall_intensity": 88.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 37.9,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 82.5
       },
-      "_source": "CWC flood-forecast station 'Purola' on Kamal (Ganga)"
+      "_source": "CWC flood-forecast station 'Purola' on Kamal (Ganga)",
+      "_physical": {
+        "elevation_meters": 2221.0,
+        "slope_degrees": 4.76
+      }
     },
     {
       "id": "uk-flood-053",
@@ -3013,13 +3273,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 82,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 80.8,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 83.8
       },
-      "_source": "CWC flood-forecast station 'Kathgodam' on Kichha (Gaula) (Ganga)"
+      "_source": "CWC flood-forecast station 'Kathgodam' on Kichha (Gaula) (Ganga)",
+      "_physical": {
+        "elevation_meters": 704.1,
+        "slope_degrees": 3.94
+      }
     },
     {
       "id": "uk-flood-054",
@@ -3070,13 +3335,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 85,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 88.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 48.5,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 83.6
       },
-      "_source": "CWC flood-forecast station 'Chhinka' on Alaknanda (Ganga)"
+      "_source": "CWC flood-forecast station 'Chhinka' on Alaknanda (Ganga)",
+      "_physical": {
+        "elevation_meters": 1846.9,
+        "slope_degrees": 4.06
+      }
     },
     {
       "id": "uk-flood-055",
@@ -3127,13 +3397,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 85,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 88.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 44.7,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 84.2
       },
-      "_source": "CWC flood-forecast station 'Vishnuprayag' on Mandakini (Ganga)"
+      "_source": "CWC flood-forecast station 'Vishnuprayag' on Mandakini (Ganga)",
+      "_physical": {
+        "elevation_meters": 1979.2,
+        "slope_degrees": 3.66
+      }
     },
     {
       "id": "uk-flood-056",
@@ -3184,13 +3459,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 82,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 43.7,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 85.7
       },
-      "_source": "CWC flood-forecast station 'Ichari Dam' on Tons (Ganga)"
+      "_source": "CWC flood-forecast station 'Ichari Dam' on Tons (Ganga)",
+      "_physical": {
+        "elevation_meters": 2014.6,
+        "slope_degrees": 2.71
+      }
     },
     {
       "id": "uk-flood-057",
@@ -3241,13 +3521,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 74.8,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 83.9
       },
-      "_source": "CWC flood-forecast station 'Banbasa Barrage' on Sarda (Ganga)"
+      "_source": "CWC flood-forecast station 'Banbasa Barrage' on Sarda (Ganga)",
+      "_physical": {
+        "elevation_meters": 916.3,
+        "slope_degrees": 3.88
+      }
     },
     {
       "id": "uk-flood-058",
@@ -3298,13 +3583,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 65.8,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 86.3
       },
-      "_source": "CWC flood-forecast station 'PURNAGIRI' on Mahakali\\Sarda (Ganga)"
+      "_source": "CWC flood-forecast station 'PURNAGIRI' on Mahakali\\Sarda (Ganga)",
+      "_physical": {
+        "elevation_meters": 1233.0,
+        "slope_degrees": 2.35
+      }
     },
     {
       "id": "uk-flood-059",
@@ -3355,13 +3645,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 78.6,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 83.5
       },
-      "_source": "CWC flood-forecast station 'Betalghat' on Kosi (Ganga)"
+      "_source": "CWC flood-forecast station 'Betalghat' on Kosi (Ganga)",
+      "_physical": {
+        "elevation_meters": 779.1,
+        "slope_degrees": 4.11
+      }
     },
     {
       "id": "uk-flood-060",
@@ -3412,13 +3707,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 83.0,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 83.6
       },
-      "_source": "CWC flood-forecast station 'Naula' on Ramganga (Ganga)"
+      "_source": "CWC flood-forecast station 'Naula' on Ramganga (Ganga)",
+      "_physical": {
+        "elevation_meters": 626.2,
+        "slope_degrees": 4.08
+      }
     },
     {
       "id": "uk-flood-061",
@@ -3469,13 +3769,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 82,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 57.2,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 83.8
       },
-      "_source": "CWC flood-forecast station 'Kalsi' on Amlav (Ganga)"
+      "_source": "CWC flood-forecast station 'Kalsi' on Amlav (Ganga)",
+      "_physical": {
+        "elevation_meters": 1538.4,
+        "slope_degrees": 3.91
+      }
     },
     {
       "id": "uk-flood-062",
@@ -3526,13 +3831,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 85,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 88.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 36.4,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 86.0
       },
-      "_source": "CWC flood-forecast station 'Uttarkashi' on Bhagirathi (Ganga)"
+      "_source": "CWC flood-forecast station 'Uttarkashi' on Bhagirathi (Ganga)",
+      "_physical": {
+        "elevation_meters": 2274.5,
+        "slope_degrees": 2.57
+      }
     },
     {
       "id": "uk-flood-063",
@@ -3583,13 +3893,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 95,
-        "elevation": 62,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 83.3,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 87.2
       },
-      "_source": "CWC flood-forecast station 'Rishikesh' on Ganga (Ganga)"
+      "_source": "CWC flood-forecast station 'Rishikesh' on Ganga (Ganga)",
+      "_physical": {
+        "elevation_meters": 612.7,
+        "slope_degrees": 1.79
+      }
     },
     {
       "id": "uk-flood-064",
@@ -3640,13 +3955,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 85,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 88.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 54.0,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 85.2
       },
-      "_source": "CWC flood-forecast station 'Pipalkoti' on Alaknanda (Ganga)"
+      "_source": "CWC flood-forecast station 'Pipalkoti' on Alaknanda (Ganga)",
+      "_physical": {
+        "elevation_meters": 1650.0,
+        "slope_degrees": 3.07
+      }
     },
     {
       "id": "uk-flood-065",
@@ -3697,13 +4017,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 85,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 88.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 53.6,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 85.0
       },
-      "_source": "CWC flood-forecast station 'Karnaprayag (A)' on Alaknanda (Ganga)"
+      "_source": "CWC flood-forecast station 'Karnaprayag (A)' on Alaknanda (Ganga)",
+      "_physical": {
+        "elevation_meters": 1663.3,
+        "slope_degrees": 3.21
+      }
     },
     {
       "id": "uk-flood-066",
@@ -3754,13 +4079,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 74.7,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 83.9
       },
-      "_source": "CWC flood-forecast station 'Banbasa' on Sarda (Ganga)"
+      "_source": "CWC flood-forecast station 'Banbasa' on Sarda (Ganga)",
+      "_physical": {
+        "elevation_meters": 918.4,
+        "slope_degrees": 3.86
+      }
     },
     {
       "id": "uk-flood-067",
@@ -3811,13 +4141,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 85,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 88.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 37.1,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 84.3
       },
-      "_source": "CWC flood-forecast station 'Maneri' on Bhagirathi (Ganga)"
+      "_source": "CWC flood-forecast station 'Maneri' on Bhagirathi (Ganga)",
+      "_physical": {
+        "elevation_meters": 2248.4,
+        "slope_degrees": 3.62
+      }
     },
     {
       "id": "uk-flood-068",
@@ -3868,13 +4203,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 85,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 88.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 56.3,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 82.1
       },
-      "_source": "CWC flood-forecast station 'Karnaprayag (P)' on Pinder (Ganga)"
+      "_source": "CWC flood-forecast station 'Karnaprayag (P)' on Pinder (Ganga)",
+      "_physical": {
+        "elevation_meters": 1568.8,
+        "slope_degrees": 5.01
+      }
     },
     {
       "id": "uk-flood-069",
@@ -3925,13 +4265,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 82,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 78.0,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 87.5
       },
-      "_source": "CWC flood-forecast station 'Marora' on Nayar (Ganga)"
+      "_source": "CWC flood-forecast station 'Marora' on Nayar (Ganga)",
+      "_physical": {
+        "elevation_meters": 803.1,
+        "slope_degrees": 1.56
+      }
     },
     {
       "id": "uk-flood-070",
@@ -3982,13 +4327,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 85,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 88.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 59.5,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 83.4
       },
-      "_source": "CWC flood-forecast station 'Bangapani' on Gauri Ganga (Ganga)"
+      "_source": "CWC flood-forecast station 'Bangapani' on Gauri Ganga (Ganga)",
+      "_physical": {
+        "elevation_meters": 1455.9,
+        "slope_degrees": 4.17
+      }
     },
     {
       "id": "uk-flood-071",
@@ -4039,13 +4389,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 79.7,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 83.1
       },
-      "_source": "CWC flood-forecast station 'Marchula' on Ramganga (Ganga)"
+      "_source": "CWC flood-forecast station 'Marchula' on Ramganga (Ganga)",
+      "_physical": {
+        "elevation_meters": 741.0,
+        "slope_degrees": 4.41
+      }
     },
     {
       "id": "uk-flood-072",
@@ -4096,13 +4451,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 85,
-        "distance_to_drainage": 82,
-        "elevation": 55,
+        "rainfall_intensity": 88.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 46.5,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 81.7
       },
-      "_source": "CWC flood-forecast station 'Brahmakhaal' on Dusk (Ganga)"
+      "_source": "CWC flood-forecast station 'Brahmakhaal' on Dusk (Ganga)",
+      "_physical": {
+        "elevation_meters": 1917.6,
+        "slope_degrees": 5.26
+      }
     },
     {
       "id": "uk-flood-073",
@@ -4153,13 +4513,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 68.9,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 83.8
       },
-      "_source": "CWC flood-forecast station 'Devprayag (B)' on Bhagirathi (Ganga)"
+      "_source": "CWC flood-forecast station 'Devprayag (B)' on Bhagirathi (Ganga)",
+      "_physical": {
+        "elevation_meters": 1124.5,
+        "slope_degrees": 3.97
+      }
     },
     {
       "id": "uk-flood-074",
@@ -4210,13 +4575,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 85,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 88.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 42.0,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 85.1
       },
-      "_source": "CWC flood-forecast station 'Naugaon' on Yamuna (Ganga)"
+      "_source": "CWC flood-forecast station 'Naugaon' on Yamuna (Ganga)",
+      "_physical": {
+        "elevation_meters": 2075.2,
+        "slope_degrees": 3.11
+      }
     },
     {
       "id": "uk-flood-075",
@@ -4267,13 +4637,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 72,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 74.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 78.8,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 86.9
       },
-      "_source": "CWC flood-forecast station 'Bhikiasen' on Ramganga (Ganga)"
+      "_source": "CWC flood-forecast station 'Bhikiasen' on Ramganga (Ganga)",
+      "_physical": {
+        "elevation_meters": 774.5,
+        "slope_degrees": 1.99
+      }
     },
     {
       "id": "uk-flood-076",
@@ -4324,13 +4699,18 @@
         ]
       },
       "factors": {
-        "rainfall_intensity": 85,
-        "distance_to_drainage": 95,
-        "elevation": 55,
+        "rainfall_intensity": 88.0,
+        "distance_to_drainage": 96.0,
+        "elevation": 61.5,
         "land_cover": 55,
-        "soil_permeability": 50
+        "soil_permeability": 50,
+        "slope": 86.4
       },
-      "_source": "CWC flood-forecast station 'Rudraprayag (A)' on Alaknanda (Ganga)"
+      "_source": "CWC flood-forecast station 'Rudraprayag (A)' on Alaknanda (Ganga)",
+      "_physical": {
+        "elevation_meters": 1385.8,
+        "slope_degrees": 2.27
+      }
     },
     {
       "id": "uk-landslide-001",
@@ -4381,13 +4761,18 @@
         ]
       },
       "factors": {
-        "slope": 92,
+        "slope": 50.0,
         "rainfall_intensity": 85,
         "lithology": 90,
         "distance_to_drainage": 70,
-        "land_cover": 78
+        "land_cover": 78,
+        "elevation": 76.3
       },
-      "_source": "NRSC Landslide Atlas hotspot: Joshimath (factors are Atlas-informed proxies)"
+      "_source": "NRSC Landslide Atlas hotspot: Joshimath (factors are Atlas-informed proxies)",
+      "_physical": {
+        "elevation_meters": 1942.7,
+        "slope_degrees": 3.34
+      }
     },
     {
       "id": "uk-landslide-002",
@@ -4438,13 +4823,18 @@
         ]
       },
       "factors": {
-        "slope": 95,
+        "slope": 50.0,
         "rainfall_intensity": 90,
         "lithology": 88,
         "distance_to_drainage": 80,
-        "land_cover": 72
+        "land_cover": 72,
+        "elevation": 78.7
       },
-      "_source": "NRSC Landslide Atlas hotspot: Gaurikund-Kedarnath (factors are Atlas-informed proxies)"
+      "_source": "NRSC Landslide Atlas hotspot: Gaurikund-Kedarnath (factors are Atlas-informed proxies)",
+      "_physical": {
+        "elevation_meters": 2143.6,
+        "slope_degrees": 4.12
+      }
     },
     {
       "id": "uk-landslide-003",
@@ -4495,13 +4885,18 @@
         ]
       },
       "factors": {
-        "slope": 88,
+        "slope": 50.0,
         "rainfall_intensity": 80,
         "lithology": 85,
         "distance_to_drainage": 65,
-        "land_cover": 75
+        "land_cover": 75,
+        "elevation": 80.3
       },
-      "_source": "NRSC Landslide Atlas hotspot: Uttarkashi (factors are Atlas-informed proxies)"
+      "_source": "NRSC Landslide Atlas hotspot: Uttarkashi (factors are Atlas-informed proxies)",
+      "_physical": {
+        "elevation_meters": 2275.2,
+        "slope_degrees": 2.58
+      }
     },
     {
       "id": "uk-cloudburst-001",
@@ -4553,11 +4948,16 @@
       },
       "factors": {
         "rainfall_intensity": 95,
-        "slope": 80,
+        "slope": 60.0,
         "catchment_area": 75,
-        "land_cover": 60
+        "land_cover": 60,
+        "elevation": 89.3
       },
-      "_source": "Documented cloudburst catchment: Kedarnath catchment"
+      "_source": "Documented cloudburst catchment: Kedarnath catchment",
+      "_physical": {
+        "elevation_meters": 2699.4,
+        "slope_degrees": 0.59
+      }
     },
     {
       "id": "uk-cloudburst-002",
@@ -4609,11 +5009,16 @@
       },
       "factors": {
         "rainfall_intensity": 88,
-        "slope": 78,
+        "slope": 60.0,
         "catchment_area": 70,
-        "land_cover": 62
+        "land_cover": 62,
+        "elevation": 85.1
       },
-      "_source": "Documented cloudburst catchment: Uttarkashi (Assi Ganga)"
+      "_source": "Documented cloudburst catchment: Uttarkashi (Assi Ganga)",
+      "_physical": {
+        "elevation_meters": 2120.3,
+        "slope_degrees": 1.73
+      }
     },
     {
       "id": "od-coastal-001",
@@ -4665,11 +5070,16 @@
       },
       "factors": {
         "shoreline_change_rate": 98,
-        "elevation": 55,
+        "elevation": 81.3,
         "wave_energy": 78,
-        "land_cover": 55
+        "land_cover": 55,
+        "slope": 0.2
       },
-      "_source": "Odisha coastal-erosion hotspot: Satabhaya (Kendrapara)"
+      "_source": "Odisha coastal-erosion hotspot: Satabhaya (Kendrapara)",
+      "_physical": {
+        "elevation_meters": 9.1,
+        "slope_degrees": 0.06
+      }
     },
     {
       "id": "od-coastal-002",
@@ -4721,11 +5131,16 @@
       },
       "factors": {
         "shoreline_change_rate": 92,
-        "elevation": 55,
+        "elevation": 87.5,
         "wave_energy": 78,
-        "land_cover": 55
+        "land_cover": 55,
+        "slope": 0.0
       },
-      "_source": "Odisha coastal-erosion hotspot: Pentha (Kendrapara)"
+      "_source": "Odisha coastal-erosion hotspot: Pentha (Kendrapara)",
+      "_physical": {
+        "elevation_meters": 5.0,
+        "slope_degrees": 0.0
+      }
     },
     {
       "id": "od-coastal-003",
@@ -4777,11 +5192,16 @@
       },
       "factors": {
         "shoreline_change_rate": 85,
-        "elevation": 62,
+        "elevation": 87.5,
         "wave_energy": 78,
-        "land_cover": 55
+        "land_cover": 55,
+        "slope": 0.0
       },
-      "_source": "Odisha coastal-erosion hotspot: Paradip coast"
+      "_source": "Odisha coastal-erosion hotspot: Paradip coast",
+      "_physical": {
+        "elevation_meters": 5.0,
+        "slope_degrees": 0.0
+      }
     },
     {
       "id": "od-coastal-004",
@@ -4833,11 +5253,16 @@
       },
       "factors": {
         "shoreline_change_rate": 80,
-        "elevation": 62,
+        "elevation": 87.5,
         "wave_energy": 78,
-        "land_cover": 55
+        "land_cover": 55,
+        "slope": 0.0
       },
-      "_source": "Odisha coastal-erosion hotspot: Puri beachfront"
+      "_source": "Odisha coastal-erosion hotspot: Puri beachfront",
+      "_physical": {
+        "elevation_meters": 5.0,
+        "slope_degrees": 0.0
+      }
     },
     {
       "id": "od-coastal-005",
@@ -4889,11 +5314,16 @@
       },
       "factors": {
         "shoreline_change_rate": 75,
-        "elevation": 62,
+        "elevation": 87.5,
         "wave_energy": 78,
-        "land_cover": 55
+        "land_cover": 55,
+        "slope": 0.0
       },
-      "_source": "Odisha coastal-erosion hotspot: Konark coast"
+      "_source": "Odisha coastal-erosion hotspot: Konark coast",
+      "_physical": {
+        "elevation_meters": 5.0,
+        "slope_degrees": 0.0
+      }
     }
   ]
 }
