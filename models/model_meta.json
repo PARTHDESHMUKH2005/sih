@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
-  "trained_at": null,
-  "winning_model": null,
+  "trained_at": "2026-09-26T20:11:19.390502+00:00",
+  "winning_model": "XGBoost",
   "features": [
     "catchment_area",
     "distance_to_drainage",
@@ -27,9 +27,16 @@
   ],
   "sample_counts": {
     "total": 86,
-    "positive": 12,
-    "negative": 74
+    "positive": 23,
+    "negative": 63
   },
   "cv_folds": 5,
+  "winning_metrics": {
+    "auc_roc_mean": 0.8173076923076923,
+    "auc_roc_std": 0.11201783224247125,
+    "f1_macro_mean": 0.7201949161949163,
+    "accuracy_mean": 0.7549019607843137,
+    "kappa_mean": 0.4624017259220178
+  },
   "onnx_file": "susceptibility.onnx"
 }

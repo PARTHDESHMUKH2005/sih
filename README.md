@@ -65,7 +65,7 @@ through a map-based dashboard built for a disaster-management official, not a GI
 | Layer | Component |
 |-------|-----------|
 | **Hazard data** | ISRO Bhuvan / NRSC Landslide Atlas, SRTM/Cartosat DEM (via Bhoonidhi), GSI Bhukosh lithology, IMD rainfall data, NDEM historic disaster records. |
-| **Scoring engine** | GIS multi-criteria model (AHP weighted overlay, optionally blended with an ML susceptibility model) — a proven approach in India for site-suitability problems. |
+| **Scoring engine** | GIS multi-criteria model (AHP weighted overlay, blended with a trained XGBoost susceptibility classifier — see Section 5b) — a proven approach in India for site-suitability problems. |
 | **Population layer** | Census/SECC habitation-level data, cross-checked against GHSL population grids so exposure isn't frozen at the 2011 census. |
 | **Carrying capacity** | Suitability scoring of candidate relocation sites on slope, land use, water access, and infrastructure distance. |
 | **Dashboard** | Map-first web dashboard showing Red Zones, ranked priorities, and suggested viable sites — no GIS expertise needed to read it. |
@@ -255,10 +255,11 @@ scale.
     normalize each factor (slope, rainfall intensity, distance to drainage, lithology, shoreline
     change rate, land cover, etc.) to a common scale, apply expert-derived pairwise-comparison
     weights per hazard, and sum to a 0–100 susceptibility score.
-  - **Optional ML susceptibility model** — a conventional supervised classifier (e.g. random forest
-    / gradient boosting) trained on the landslide/flood inventory vs. the same factor stack, used to
-    produce an alternative susceptibility layer. This is a plain model-inference step producing one
-    raster; it is not an agent and adds no autonomy. CPU-only.
+  - **Optional ML susceptibility model** — a conventional supervised classifier (XGBoost, selected
+    over Random Forest and Logistic Regression via Stratified 5-Fold CV — see Section 5b) trained
+    on the landslide/flood inventory vs. the same factor stack, used to produce an alternative
+    susceptibility layer. This is a plain model-inference step producing one raster; it is not an
+    agent and adds no autonomy. CPU-only, exported to ONNX (33 KB).
 - **Deliverable:** A scored grid (raster) and/or vectorized polygon layer per hazard, plus a
   combined multi-hazard layer; weights and factor definitions stored in a versioned config file so
   runs are reproducible; a `make score` target. Re-running on new rainfall/imagery regenerates the
@@ -388,6 +389,89 @@ scale.
 | **Alerting loop** | When a data refresh pushes a habitation into the "Immediate" tier, fire an SMS/email to the assigned SDMA official. | Closes the "continuously updated" story into an actual action, not just a nicer map. |
 | **Change / diff view** | Show what moved between this run and the last (new Red Zone, tier upgrade) with a timestamp. | Reuses the audit log from Phase 8; gives officials a sense of trend, not just a snapshot. |
 | **Hindi / regional-language toggle** | UI toggle for Hindi and relevant regional languages. | The actual end users are district-level officials, not just English speakers — near-zero build cost, high real-deployment signal. |
+
+---
+
+## 5b. ML Susceptibility Pipeline — Model Calibration & Results
+
+> The optional ML susceptibility layer (Phase 2) has been trained, benchmarked, and exported.
+> It serves as a **secondary scoring input** to the AHP overlay — adding data-driven signal
+> without replacing the deterministic, auditable scoring path.
+
+### Dataset
+
+| Property | Value |
+|----------|-------|
+| **Source** | 86 real Uttarakhand hazard zones (`backend/fixtures/raw/uttarakhand/`) |
+| **Positive labels** | 23 zones within 10 km of a verified historical disaster event |
+| **Negative labels** | 63 zones with no confirmed event nearby |
+| **Imbalance ratio** | 1 : 2.7 (handled via `class_weight='balanced'` / `scale_pos_weight`) |
+| **Features** | 14 (10 geophysical factors + 4 hazard-type one-hot encodings) |
+| **Label strategy** | Spatial join: zone centroid within 10 km of a matching hazard-type event → positive |
+
+### Three-Model Benchmark (Stratified 5-Fold Cross-Validation)
+
+| Metric | Logistic Regression | Random Forest | **XGBoost ★ Winner** |
+|--------|---------------------|---------------|----------------------|
+| **AUC-ROC** | 0.733 ± 0.176 | 0.786 ± 0.140 | **0.817 ± 0.112** |
+| **F1-Macro** | 0.599 ± 0.168 | 0.658 ± 0.200 | **0.720 ± 0.183** |
+| **Cohen's κ** | 0.201 ± 0.335 | 0.352 ± 0.369 | **0.462 ± 0.336** |
+| **Accuracy** | 69.7% | 74.2% | **75.5%** |
+| **Precision** | 39.0% | 50.0% | **60.4%** |
+| **Recall** | 42.0% | 55.0% | **68.0%** |
+
+XGBoost was selected as the winner by highest mean AUC-ROC. It dominates all three metrics
+that matter for a hazard-screening model: AUC-ROC (discrimination), Recall (don't miss real
+hazards), and stability (lowest AUC standard deviation).
+
+### Diagnostic Charts
+
+#### ROC Curves
+
+<p align="center">
+  <img src="docs/ml/roc_curves.png" alt="Stratified 5-Fold ROC: LR vs RF vs XGBoost" width="600" />
+</p>
+
+#### Confusion Matrices (Aggregated Across 5 Folds)
+
+<p align="center">
+  <img src="docs/ml/confusion_matrices.png" alt="Confusion matrices for LR, RF, and XGBoost" width="750" />
+</p>
+
+XGBoost catches **16 of 23 positives** (69.6% recall) vs. 13 for RF and 10 for LR. For a hazard
+screening system, catching real disaster-prone zones is more important than minimizing false
+positives (which go to human review anyway).
+
+#### Feature Importance
+
+<p align="center">
+  <img src="docs/ml/feature_importance.png" alt="Feature importance: RF vs XGBoost" width="650" />
+</p>
+
+Top features: `distance_to_drainage` (dominant for XGBoost), `elevation`, `slope`, and
+`rainfall_intensity` — all physically interpretable and consistent with published Himalayan
+landslide/flood susceptibility literature.
+
+### Deployment
+
+| Artifact | Path | Size |
+|----------|------|------|
+| ONNX model | `models/susceptibility.onnx` | 33.4 KB |
+| Metadata | `models/model_meta.json` | feature list, metrics, training timestamp |
+| Full report | `models/comparison_report.json` | per-fold metrics for all 3 models |
+
+**Runtime:** CPU-only inference via `onnxruntime-node` in the Express backend — no Python
+runtime or GPU required. Enable with `ENABLE_ML_SUSCEPTIBILITY=true` in `.env`.
+
+```bash
+# Retrain from scratch
+cd ml && pip install -r requirements.txt
+python3 train.py --repo-root .. --cv-folds 5
+
+# Enable in backend
+echo "ENABLE_ML_SUSCEPTIBILITY=true" >> ../.env
+cd ../backend && npm run score
+```
 
 ---
 
@@ -580,6 +664,18 @@ bhoomi-suraksha/
 │   └── src/
 │       ├── components/          # MapView, Filters, PrioritizationPanel, SiteDetail, LoginScreen
 │       └── lib/export.ts        # CSV / GeoJSON export of the filtered prioritization plan
+├── ml/                          # ML susceptibility pipeline (Python)
+│   ├── train.py                 # 3-model benchmark (LR vs RF vs XGBoost), ONNX export
+│   ├── extract_features.py      # geospatial feature extraction (Open-Elevation + heuristics)
+│   └── requirements.txt         # scikit-learn, xgboost, onnx, matplotlib, etc.
+├── models/                      # ML model artifacts (generated by ml/train.py)
+│   ├── susceptibility.onnx      # winning XGBoost model (33 KB, CPU inference)
+│   ├── model_meta.json          # features, metrics, training timestamp
+│   ├── comparison_report.json   # per-fold metrics for all 3 models
+│   ├── roc_curves.png           # ROC diagnostic chart
+│   ├── confusion_matrices.png   # confusion matrix chart
+│   └── feature_importance.png   # RF vs XGBoost feature importance chart
+├── docs/ml/                     # ML diagnostic charts (for README rendering)
 ├── config/
 │   └── ahp_weights.yaml         # versioned AHP factor weights per hazard type
 ├── data/

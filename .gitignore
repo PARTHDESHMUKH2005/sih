@@ -14,3 +14,9 @@ models/*.onnx
 models/*.png
 models/comparison_report.json
 
+# Python venv and caches
+ml/.venv/
+__pycache__/
+*.pyc
+*.bak
+*.ses

@@ -17,7 +17,7 @@ import sys
 import json
 import math
 import argparse
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 # Third-party scientific libraries
@@ -25,6 +25,9 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import StratifiedKFold
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
 from sklearn.metrics import (
     accuracy_score,
     precision_score,
@@ -178,7 +181,7 @@ def load_dataset(repo_root: Path, radius_km: float = 5.0):
     return df_x, y, zone_ids, zone_types
 
 
-def evaluate_cv(model_cls, model_kwargs, X: np.ndarray, y: np.ndarray, cv: StratifiedKFold):
+def evaluate_cv(model_fn, X: np.ndarray, y: np.ndarray, cv: StratifiedKFold):
     """
     Run Stratified K-Fold CV, collecting all evaluation metrics and ROC curves.
     """
@@ -194,7 +197,7 @@ def evaluate_cv(model_cls, model_kwargs, X: np.ndarray, y: np.ndarray, cv: Strat
         X_train, X_val = X[train_idx], X[val_idx]
         y_train, y_val = y[train_idx], y[val_idx]
 
-        clf = model_cls(**model_kwargs)
+        clf = model_fn()
         clf.fit(X_train, y_train)
 
         y_prob = clf.predict_proba(X_val)[:, 1]
@@ -263,7 +266,7 @@ def export_to_onnx(model, model_type: str, num_features: int, output_path: Path)
     Export scikit-learn or XGBoost classifier to ONNX format.
     """
     try:
-        if model_type == "RandomForest":
+        if model_type in ("RandomForest", "LogisticRegression"):
             from skl2onnx import convert_sklearn
             from skl2onnx.common.data_types import FloatTensorType
 
@@ -299,7 +302,7 @@ def export_to_onnx(model, model_type: str, num_features: int, output_path: Path)
         return False
 
 
-def generate_plots(rf_res, xgb_res, rf_model, xgb_model, feature_names, output_dir: Path):
+def generate_plots(lr_res, rf_res, xgb_res, rf_model, xgb_model, feature_names, output_dir: Path):
     """
     Save evaluation plots: ROC curves, confusion matrices, and feature importances.
     """
@@ -312,29 +315,38 @@ def generate_plots(rf_res, xgb_res, rf_model, xgb_model, feature_names, output_d
 
         # 1. ROC Curves
         plt.figure(figsize=(8, 6))
+        lr_roc = lr_res["roc_curve"]
         rf_roc = rf_res["roc_curve"]
         xgb_roc = xgb_res["roc_curve"]
 
+        plt.plot(
+            lr_roc["mean_fpr"],
+            lr_roc["mean_tpr"],
+            label=f"Logistic Regression (AUC = {lr_roc['mean_auc']:.2f} ± {lr_roc['std_auc']:.2f})",
+            color="#718096",
+            linestyle="--",
+            lw=1.8,
+        )
         plt.plot(
             rf_roc["mean_fpr"],
             rf_roc["mean_tpr"],
             label=f"Random Forest (AUC = {rf_roc['mean_auc']:.2f} ± {rf_roc['std_auc']:.2f})",
             color="#2b6cb0",
-            lw=2,
+            lw=2.2,
         )
         plt.plot(
             xgb_roc["mean_fpr"],
             xgb_roc["mean_tpr"],
             label=f"XGBoost (AUC = {xgb_roc['mean_auc']:.2f} ± {xgb_roc['std_auc']:.2f})",
             color="#d69e2e",
-            lw=2,
+            lw=2.2,
         )
-        plt.plot([0, 1], [0, 1], "k--", lw=1.5, alpha=0.6, label="Chance (AUC = 0.50)")
+        plt.plot([0, 1], [0, 1], "k:", lw=1.2, alpha=0.5, label="Chance (AUC = 0.50)")
         plt.xlim([0.0, 1.0])
         plt.ylim([0.0, 1.05])
         plt.xlabel("False Positive Rate", fontsize=11)
         plt.ylabel("True Positive Rate", fontsize=11)
-        plt.title("Stratified 5-Fold ROC Curve: Random Forest vs. XGBoost", fontsize=13, fontweight="bold")
+        plt.title("Stratified 5-Fold ROC: Logistic Reg vs. Random Forest vs. XGBoost", fontsize=13, fontweight="bold")
         plt.legend(loc="lower right", frameon=True)
         plt.grid(True, linestyle=":", alpha=0.6)
         plt.tight_layout()
@@ -342,8 +354,8 @@ def generate_plots(rf_res, xgb_res, rf_model, xgb_model, feature_names, output_d
         plt.close()
 
         # 2. Confusion Matrices
-        fig, axes = plt.subplots(1, 2, figsize=(10, 4.5))
-        for ax, res, title in [(axes[0], rf_res, "Random Forest"), (axes[1], xgb_res, "XGBoost")]:
+        fig, axes = plt.subplots(1, 3, figsize=(14, 4.5))
+        for ax, res, title in [(axes[0], lr_res, "Logistic Regression"), (axes[1], rf_res, "Random Forest"), (axes[2], xgb_res, "XGBoost")]:
             cm = np.array(res["confusion_matrix"])
             im = ax.imshow(cm, interpolation="nearest", cmap=plt.cm.Blues)
             ax.set_title(f"{title} (5-Fold Aggregated)", fontsize=11, fontweight="bold")
@@ -392,9 +404,9 @@ def generate_plots(rf_res, xgb_res, rf_model, xgb_model, feature_names, output_d
         print(f"[train] Note: Skipping plot generation ({e})")
 
 
-def print_comparison_table(rf_summary: dict, xgb_summary: dict):
+def print_comparison_table(lr_summary: dict, rf_summary: dict, xgb_summary: dict):
     """
-    Print an ASCII table comparing all evaluation metrics.
+    Print an ASCII table comparing all evaluation metrics across all 3 models.
     """
     metrics = [
         ("AUC-ROC", "auc_roc"),
@@ -405,19 +417,21 @@ def print_comparison_table(rf_summary: dict, xgb_summary: dict):
         ("Recall", "recall"),
     ]
 
-    print("\n" + "=" * 70)
+    print("\n" + "=" * 94)
     print(" MODEL PERFORMANCE COMPARISON (Stratified 5-Fold Cross-Validation)")
-    print("=" * 70)
-    print(f"{'Metric':<22} | {'Random Forest (mean ± std)':<22} | {'XGBoost (mean ± std)':<20}")
-    print("-" * 70)
+    print("=" * 94)
+    print(f"{'Metric':<20} | {'Logistic Reg (LR)':<22} | {'Random Forest (RF)':<22} | {'XGBoost (XGB)':<22}")
+    print("-" * 94)
 
     for label, key in metrics:
+        lr_m = lr_summary[key]
         rf_m = rf_summary[key]
         xgb_m = xgb_summary[key]
+        lr_str = f"{lr_m['mean']:.4f} ± {lr_m['std']:.4f}"
         rf_str = f"{rf_m['mean']:.4f} ± {rf_m['std']:.4f}"
         xgb_str = f"{xgb_m['mean']:.4f} ± {xgb_m['std']:.4f}"
-        print(f"{label:<22} | {rf_str:<22} | {xgb_str:<20}")
-    print("=" * 70 + "\n")
+        print(f"{label:<20} | {lr_str:<22} | {rf_str:<22} | {xgb_str:<22}")
+    print("=" * 94 + "\n")
 
 
 def main():
@@ -426,6 +440,7 @@ def main():
     parser.add_argument("--output-dir", type=Path, default=None)
     parser.add_argument("--cv-folds", type=int, default=5)
     parser.add_argument("--random-state", type=int, default=42)
+    parser.add_argument("--radius-km", type=float, default=10.0, help="Spatial join radius in km for event matching")
     args = parser.parse_args()
 
     repo_root = args.repo_root
@@ -436,14 +451,14 @@ def main():
     print(f"[train] Loading Uttarakhand real data from {repo_root / 'backend/fixtures/raw/uttarakhand'}")
 
     # 1. Load data and label
-    df_x, y, zone_ids, zone_types = load_dataset(repo_root, radius_km=5.0)
+    df_x, y, zone_ids, zone_types = load_dataset(repo_root, radius_km=args.radius_km)
     num_samples = len(y)
     num_pos = int(np.sum(y == 1))
     num_neg = int(np.sum(y == 0))
 
     print(f"[train] Loaded {num_samples} zones:")
-    print(f"        Positive labels (within 5km of event): {num_pos} ({num_pos / num_samples * 100:.1f}%)")
-    print(f"        Negative labels (unconfirmed):         {num_neg} ({num_neg / num_samples * 100:.1f}%)")
+    print(f"        Positive labels (within {args.radius_km}km of event): {num_pos} ({num_pos / num_samples * 100:.1f}%)")
+    print(f"        Negative labels (unconfirmed):          {num_neg} ({num_neg / num_samples * 100:.1f}%)")
     print(f"[train] Feature matrix: {num_samples} rows × {len(FEATURE_NAMES)} columns")
 
     X = df_x.values.astype(np.float32)
@@ -452,62 +467,67 @@ def main():
     cv = StratifiedKFold(n_splits=args.cv_folds, shuffle=True, random_state=args.random_state)
 
     # 3. Model configs
+    lr_kwargs = {
+        "class_weight": "balanced",
+        "max_iter": 1000,
+        "random_state": args.random_state,
+    }
+    lr_factory = lambda: Pipeline([
+        ("scaler", StandardScaler()),
+        ("clf", LogisticRegression(**lr_kwargs)),
+    ])
+
     rf_kwargs = {
-        "n_estimators": 200,
-        "max_depth": 8,
+        "n_estimators": 150,
+        "max_depth": 3,
+        "min_samples_leaf": 2,
         "class_weight": "balanced",
         "random_state": args.random_state,
         "n_jobs": -1,
     }
+    rf_factory = lambda: RandomForestClassifier(**rf_kwargs)
 
     scale_pos = float(num_neg) / max(float(num_pos), 1.0)
     xgb_kwargs = {
-        "n_estimators": 200,
-        "max_depth": 6,
+        "n_estimators": 100,
+        "max_depth": 3,
+        "learning_rate": 0.08,
         "scale_pos_weight": scale_pos,
         "eval_metric": "logloss",
         "random_state": args.random_state,
         "n_jobs": -1,
     }
+    xgb_factory = lambda: XGBClassifier(**xgb_kwargs)
 
-    print(f"\n[train] Running Stratified {args.cv_folds}-Fold Cross-Validation...")
+    print(f"\n[train] Running Stratified {args.cv_folds}-Fold Cross-Validation across 3 models...")
 
-    # 4. Evaluate Random Forest
-    rf_results = evaluate_cv(RandomForestClassifier, rf_kwargs, X, y, cv)
+    # 4. Evaluate all 3 models
+    lr_results = evaluate_cv(lr_factory, X, y, cv)
+    rf_results = evaluate_cv(rf_factory, X, y, cv)
+    xgb_results = evaluate_cv(xgb_factory, X, y, cv)
 
-    # 5. Evaluate XGBoost
-    xgb_results = evaluate_cv(XGBClassifier, xgb_kwargs, X, y, cv)
+    # 5. Display 3-model comparison
+    print_comparison_table(lr_results["summary"], rf_results["summary"], xgb_results["summary"])
 
-    # 6. Display comparison
-    print_comparison_table(rf_results["summary"], xgb_results["summary"])
-
-    rf_auc = rf_results["summary"]["auc_roc"]["mean"]
-    xgb_auc = xgb_results["summary"]["auc_roc"]["mean"]
-    rf_f1 = rf_results["summary"]["f1_macro"]["mean"]
-    xgb_f1 = xgb_results["summary"]["f1_macro"]["mean"]
-
-    # Select winner
-    if xgb_auc > rf_auc or (math.isclose(xgb_auc, rf_auc, rel_tol=1e-3) and xgb_f1 >= rf_f1):
-        winner_name = "XGBoost"
-        winner_model_cls = XGBClassifier
-        winner_kwargs = xgb_kwargs
-        winning_metrics = xgb_results["summary"]
-    else:
-        winner_name = "RandomForest"
-        winner_model_cls = RandomForestClassifier
-        winner_kwargs = rf_kwargs
-        winning_metrics = rf_results["summary"]
+    # 6. Select winner
+    candidates = [
+        ("XGBoost", xgb_results["summary"], xgb_factory),
+        ("RandomForest", rf_results["summary"], rf_factory),
+        ("LogisticRegression", lr_results["summary"], lr_factory),
+    ]
+    candidates.sort(key=lambda c: (c[1]["auc_roc"]["mean"], c[1]["f1_macro"]["mean"]), reverse=True)
+    winner_name, winning_metrics, winner_factory = candidates[0]
 
     print(f"[train] -> Selected winner: {winner_name} (Mean AUC-ROC: {winning_metrics['auc_roc']['mean']:.4f})")
 
-    # 7. Retrain winner and baseline on full dataset
+    # 7. Retrain winner on full dataset
     print(f"[train] Retraining {winner_name} on all {num_samples} samples...")
-    final_winner = winner_model_cls(**winner_kwargs)
+    final_winner = winner_factory()
     final_winner.fit(X, y)
 
     # Fit RF & XGB models for feature importance comparison
-    full_rf = RandomForestClassifier(**rf_kwargs).fit(X, y)
-    full_xgb = XGBClassifier(**xgb_kwargs).fit(X, y)
+    full_rf = rf_factory().fit(X, y)
+    full_xgb = xgb_factory().fit(X, y)
 
     # 8. Export to ONNX
     onnx_path = output_dir / "susceptibility.onnx"
@@ -517,12 +537,12 @@ def main():
         print(f"[train] Successfully generated {onnx_path} ({os.path.getsize(onnx_path)} bytes)")
 
     # 9. Save plots
-    generate_plots(rf_results, xgb_results, full_rf, full_xgb, FEATURE_NAMES, output_dir)
+    generate_plots(lr_results, rf_results, xgb_results, full_rf, full_xgb, FEATURE_NAMES, output_dir)
 
     # 10. Write model_meta.json
     meta = {
         "version": "1.0.0",
-        "trained_at": datetime.utcnow().isoformat() + "Z",
+        "trained_at": datetime.now(timezone.utc).isoformat(),
         "winning_model": winner_name,
         "features": FEATURE_NAMES,
         "num_features": len(FEATURE_NAMES),
@@ -550,7 +570,7 @@ def main():
 
     # 11. Write comparison_report.json
     report = {
-        "generated_at": datetime.utcnow().isoformat() + "Z",
+        "generated_at": datetime.now(timezone.utc).isoformat(),
         "dataset": {
             "source": "backend/fixtures/raw/uttarakhand",
             "total_zones": num_samples,
@@ -563,6 +583,11 @@ def main():
             "reason": "Highest mean Stratified 5-Fold AUC-ROC score",
         },
         "models": {
+            "LogisticRegression": {
+                "summary": lr_results["summary"],
+                "folds": lr_results["folds"],
+                "confusion_matrix": lr_results["confusion_matrix"],
+            },
             "RandomForest": {
                 "summary": rf_results["summary"],
                 "folds": rf_results["folds"],

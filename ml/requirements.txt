@@ -6,3 +6,6 @@ skl2onnx>=1.17.0
 matplotlib>=3.9.0
 numpy>=1.26.0
 pandas>=2.2.0
+onnxruntime>=1.18.0
+shapely>=2.0.0
+rasterio>=1.4.0

@@ -71,6 +71,134 @@
       "eventDate": "1999-10-29",
       "severity": 98,
       "source": "Odisha Super Cyclone 1999"
+    },
+    {
+      "id": "uk-evt-07",
+      "habitationId": "uk-hab-06",
+      "hazardType": "flood",
+      "eventDate": "2013-06-17",
+      "severity": 88,
+      "source": "CWC HFL breach; Alaknanda & Pinder confluence flood (NDMA/CWC)"
+    },
+    {
+      "id": "uk-evt-08",
+      "habitationId": "uk-hab-07",
+      "hazardType": "flood",
+      "eventDate": "2013-06-17",
+      "severity": 82,
+      "source": "Alaknanda surge & riverside market inundation 2013 (USDMA)"
+    },
+    {
+      "id": "uk-evt-09",
+      "habitationId": "uk-hab-04",
+      "hazardType": "flood",
+      "eventDate": "2013-06-17",
+      "severity": 90,
+      "source": "Bhagirathi-Alaknanda dual crest; lower town submergence (CWC)"
+    },
+    {
+      "id": "uk-evt-10",
+      "habitationId": "uk-hab-04",
+      "hazardType": "flood",
+      "eventDate": "2010-09-20",
+      "severity": 78,
+      "source": "September 2010 Ganga basin monsoon flood event (CWC)"
+    },
+    {
+      "id": "uk-evt-11",
+      "habitationId": "uk-hab-06",
+      "hazardType": "landslide",
+      "eventDate": "2021-10-19",
+      "severity": 80,
+      "source": "NH-58 Kaleshwar-Karnaprayag hill collapse (Border Roads Org)"
+    },
+    {
+      "id": "uk-evt-12",
+      "habitationId": "uk-hab-07",
+      "hazardType": "landslide",
+      "eventDate": "2017-07-15",
+      "severity": 75,
+      "source": "Chamoli district monsoon slope reactivation (NRSC Atlas)"
+    },
+    {
+      "id": "uk-evt-13",
+      "habitationId": "uk-hab-05",
+      "hazardType": "flood",
+      "eventDate": "2012-08-04",
+      "severity": 86,
+      "source": "Assi Ganga flash flood & bridge washaway (NDMA record)"
+    },
+    {
+      "id": "uk-evt-14",
+      "habitationId": "uk-hab-05",
+      "hazardType": "landslide",
+      "eventDate": "2003-09-24",
+      "severity": 94,
+      "source": "Varunavat Parvat major rockfall & township damage (GSI record)"
+    },
+    {
+      "id": "uk-evt-15",
+      "habitationId": "uk-hab-02",
+      "hazardType": "flood",
+      "eventDate": "2010-09-19",
+      "severity": 82,
+      "source": "CWC Danger Level breach at Srinagar Alaknanda gauge (CWC)"
+    },
+    {
+      "id": "uk-evt-16",
+      "habitationId": "uk-hab-03",
+      "hazardType": "landslide",
+      "eventDate": "2018-08-11",
+      "severity": 76,
+      "source": "Banswara-Rudraprayag highway debris slide (USDMA)"
+    },
+    {
+      "id": "uk-evt-17",
+      "habitationId": "od-hab-03",
+      "hazardType": "coastal_erosion",
+      "eventDate": "1999-10-29",
+      "severity": 96,
+      "source": "Odisha Super Cyclone storm surge & beach erosion (IMD/OSDMA)"
+    },
+    {
+      "id": "uk-evt-18",
+      "habitationId": "od-hab-03",
+      "hazardType": "coastal_erosion",
+      "eventDate": "2021-05-26",
+      "severity": 84,
+      "source": "Cyclone Yaas tidal breach & shoreline loss (OSDMA)"
+    },
+    {
+      "id": "uk-evt-19",
+      "habitationId": "uk-hab-08",
+      "hazardType": "landslide",
+      "eventDate": "2013-06-16",
+      "severity": 96,
+      "source": "Kedarnath debris flow and moraine collapse 2013 (GSI/NRSC)"
+    },
+    {
+      "id": "uk-evt-20",
+      "habitationId": "uk-hab-08",
+      "hazardType": "cloudburst",
+      "eventDate": "2013-06-16",
+      "severity": 98,
+      "source": "June 2013 Chorabari catchment extreme precipitation cloudburst (IMD)"
+    },
+    {
+      "id": "uk-evt-21",
+      "habitationId": "uk-hab-05",
+      "hazardType": "cloudburst",
+      "eventDate": "2012-08-03",
+      "severity": 90,
+      "source": "Assi Ganga extreme rainfall cloudburst surge 2012 (IMD/NDMA)"
+    },
+    {
+      "id": "uk-evt-22",
+      "habitationId": "uk-hab-03",
+      "hazardType": "cloudburst",
+      "eventDate": "2017-07-20",
+      "severity": 82,
+      "source": "Mandakini valley tributary cloudburst surge (USDMA)"
     }
   ]
 }
